@@ -16,11 +16,7 @@ object Server extends App {
   implicit val actorSystem: ActorSystem = ActorSystem()
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
-  Http().bindAndHandle(routesService.routes, "localhost", port)
-
-  println(
-    s"Server started, visit http://localhost:$port/api/v0.0 for the API docs"
-  )
+  Http().bindAndHandle(routesService.routes, "0.0.0.0", port)
   StdIn.readLine()
 
 }
