@@ -6,8 +6,6 @@ import akka.stream.ActorMaterializer
 import com.gaston.todo.tapir.server.repository.ToDosRepository
 import com.typesafe.config.ConfigFactory
 
-import scala.io.StdIn
-
 object Server extends App {
 
   val config = ConfigFactory.load()
@@ -17,6 +15,5 @@ object Server extends App {
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
   Http().bindAndHandle(routesService.routes, "0.0.0.0", port)
-  StdIn.readLine()
 
 }
