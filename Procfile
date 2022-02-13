@@ -1,1 +1,1 @@
-web: ./todo-server/target/universal/stage/bin/server -Dhttp.port=${port}
+web: ./todo-server/target/universal/stage/bin/server -Dhttp.port=$PORT
