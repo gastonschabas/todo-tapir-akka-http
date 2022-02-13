@@ -11,18 +11,15 @@ import scala.io.StdIn
 object Server extends App {
 
   val config = ConfigFactory.load()
+  val port = config.getInt("server.port")
   val routesService = new RoutesService(new ToDosRepository)
   implicit val actorSystem: ActorSystem = ActorSystem()
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
-  Http().bindAndHandle(
-    routesService.routes,
-    "localhost",
-    config.getInt("server.port")
-  )
+  Http().bindAndHandle(routesService.routes, "localhost", port)
 
   println(
-    "Server started, visit http://localhost:8080/api/v0.0 for the API docs"
+    s"Server started, visit http://localhost:$port/api/v0.0 for the API docs"
   )
   StdIn.readLine()
 
