@@ -1,0 +1,26 @@
+name: Continious Integration
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache SBT
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.ivy2/cache
+            ~/.sbt
+          key: ${{ runner.os }}-sbt-${{ hashFiles('**/build.sbt') }}
+      - name: Setup Scala
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Validate Scala Format
+        run: sbt clean compile scalafmtCheckAll scalafmtSbtCheck
