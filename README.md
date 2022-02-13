@@ -20,7 +20,7 @@ The project has three modules.
 # Running locally
 
 The server can be executed in Dev or Prod mode. The `default port` is `8080`, but it can be overridden if the 
-environment variable `TODO_SERVER_PORT` is set 
+variable `http.port` is set.
 
 ## Dev Mode
 
