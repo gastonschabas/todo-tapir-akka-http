@@ -39,8 +39,10 @@ lazy val apiSpec = (project in file("todo-api-spec"))
 lazy val server = (project in file("todo-server"))
   .settings(
     libraryDependencies := Seq(
-      "com.softwaremill.tapir" %% "tapir-akka-http-server" % tapirVersion,
-      "com.typesafe"            % "config"                 % "1.4.1"
+      "com.softwaremill.tapir"     %% "tapir-akka-http-server" % tapirVersion,
+      "com.typesafe"                % "config"                 % "1.4.1",
+      "com.typesafe.scala-logging" %% "scala-logging"          % "3.9.4",
+      "ch.qos.logback"              % "logback-classic"        % "1.2.10"
     ),
     Compile / run / mainClass := Some("com.gaston.todo.tapir.server.Server")
   )
