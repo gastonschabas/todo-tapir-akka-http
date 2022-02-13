@@ -17,8 +17,7 @@ class RoutesService(toDosRepository: ToDosRepository) {
 
   private val todoDescriptionEndpoint =
     Endpoints.todoDescriptionEndpoint.toRoute { _ =>
-      Future.successful(Right(
-        s"""
+      Future.successful(Right(s"""
           | A simple API to create a list of pending ToDos.
           | The spec can be found in `/api/${Endpoints.version}/spec`
           |""".stripMargin))
