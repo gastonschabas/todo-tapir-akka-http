@@ -9,7 +9,7 @@ import com.typesafe.config.ConfigFactory
 object Server extends App {
 
   val config = ConfigFactory.load()
-  val port = config.getInt("server.port")
+  val port = config.getInt("http.port")
   val routesService = new RoutesService(new ToDosRepository)
   implicit val actorSystem: ActorSystem = ActorSystem()
   implicit val materializer: ActorMaterializer = ActorMaterializer()
