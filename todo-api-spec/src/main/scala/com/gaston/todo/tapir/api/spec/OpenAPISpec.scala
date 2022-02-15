@@ -2,7 +2,7 @@ package com.gaston.todo.tapir.api.spec
 
 import com.gaston.todo.tapir.endpoint.Endpoints
 
-object OpenAPISpec {
+object OpenAPISpec extends App {
 
   import tapir.docs.openapi._
   import tapir.openapi.OpenAPI
@@ -12,5 +12,7 @@ object OpenAPISpec {
     Endpoints.exposedEndpoints.toOpenAPI("The ToDo API", Endpoints.version)
 
   val yaml = openAPI.toYaml
+
+  println(yaml)
 
 }
