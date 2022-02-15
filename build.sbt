@@ -1,4 +1,11 @@
 lazy val tapirVersion = "0.11.11"
+lazy val akkaVersion = "2.6.18"
+lazy val akkaHttpVersion = "10.2.8"
+lazy val pac4jVersion = "4.5.4"
+lazy val pac4jAkkaHttpVersion = "0.7.2"
+lazy val scalaLoggingVersion = "3.9.4"
+lazy val logbackVersion = "1.2.10"
+lazy val typeSafeConfigVersion = "1.4.2"
 
 lazy val root =
   (project in file("."))
@@ -39,10 +46,16 @@ lazy val apiSpec = (project in file("todo-api-spec"))
 lazy val server = (project in file("todo-server"))
   .settings(
     libraryDependencies := Seq(
-      "com.softwaremill.tapir"     %% "tapir-akka-http-server" % tapirVersion,
-      "com.typesafe"                % "config"                 % "1.4.1",
-      "com.typesafe.scala-logging" %% "scala-logging"          % "3.9.4",
-      "ch.qos.logback"              % "logback-classic"        % "1.2.10"
+      "com.typesafe.akka"      %% "akka-actor-typed"       % akkaVersion,
+      "com.typesafe.akka"      %% "akka-stream"            % akkaVersion,
+      "com.typesafe.akka"      %% "akka-http"              % akkaHttpVersion,
+      "com.softwaremill.tapir" %% "tapir-akka-http-server" % tapirVersion,
+      "com.typesafe"                % "config"          % typeSafeConfigVersion,
+      "com.typesafe.scala-logging" %% "scala-logging"   % scalaLoggingVersion,
+      "ch.qos.logback"              % "logback-classic" % logbackVersion,
+      "org.pac4j"                   % "pac4j-http"      % pac4jVersion,
+      "org.pac4j"                   % "pac4j-jwt"       % pac4jVersion,
+      "com.stackstate"             %% "akka-http-pac4j" % pac4jAkkaHttpVersion
     ),
     Compile / run / mainClass := Some("com.gaston.todo.tapir.server.Server")
   )

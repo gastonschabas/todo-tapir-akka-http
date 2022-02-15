@@ -52,6 +52,7 @@ object Endpoints {
 
   val addToDoEndpoint = todoBaseEndpoint.post
     .description("creates a new ToDo")
+    .in(auth.bearer)
     .in(
       jsonBody[CreateToDoRequest]
         .description("The ToDo to be saved")
@@ -64,6 +65,11 @@ object Endpoints {
     )
 
   val exposedEndpoints =
-    List(openAPISpec, todoDescriptionEndpoint, getToDosEndpoint)
+    List(
+      openAPISpec,
+      todoDescriptionEndpoint,
+      getToDosEndpoint,
+      addToDoEndpoint
+    )
 
 }
