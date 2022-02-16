@@ -51,19 +51,32 @@ class Routes(
       )
   }
 
-  //  val getTodoEndpoint = ???
+  val getTodoEndpoint = Endpoints.getTodoEndpoint.toRoute { id =>
+    toDosRepository.getToDo(id) match {
+      case Some(todo) => Future(Right(todo))
+      case None => Future(Left(s"ToDo $id was not found"))
+    }
+  }
 
   val addToDoEndpoint =
-    akkaHttpSecurity.withAuthentication("DirectBearerAuthClient") {
-      authenticatedRequest =>
-        Endpoints.addToDoEndpoint.toRoute { toDo =>
-          val id =
-            toDosRepository.addToDo(ToDoVO(toDo._2.title, toDo._2.description))
-          Future(Right(CreateToDoResponse(id)))
-        }
+    akkaHttpSecurity.withAuthentication("DirectBearerAuthClient") { _ =>
+      Endpoints.addToDoEndpoint.toRoute { case (_, toDo) =>
+        val id =
+          toDosRepository.addToDo(ToDoVO(toDo.title, toDo.description))
+        Future(Right(CreateToDoResponse(id)))
+      }
+    }
+
+  val deleteToDoEndpoint =
+    akkaHttpSecurity.withAuthentication("DirectBearerAuthClient") { _ =>
+      Endpoints.deleteTodoEndpoint.toRoute { case (_, id) =>
+        val wasDeleted = toDosRepository.deleteToDo(id)
+        if (wasDeleted) Future(Right(s"ToDo $id was deleted"))
+        else Future(Right(s"ToDo $id was not deleted"))
+      }
     }
 
   val routes =
-    openAPISpec ~ todoDescriptionEndpoint ~ getToDosEndpoint ~ addToDoEndpoint
+    openAPISpec ~ todoDescriptionEndpoint ~ getTodoEndpoint ~ getToDosEndpoint ~ addToDoEndpoint ~ deleteToDoEndpoint
 
 }

@@ -1,5 +1,7 @@
 package com.gaston.todo.tapir.server.repository
 
+import com.gaston.todo.tapir.contract.response.ToDoResponse
+
 import java.util.UUID
 import scala.collection.mutable.ListBuffer
 
@@ -14,6 +16,10 @@ class ToDosRepository {
     ToDoRow(UUID.randomUUID(), "7 ToDo title", "7 ToDo description")
   )
 
+  def getToDo(id: UUID): Option[ToDoResponse] = todos
+    .find(_.id == id)
+    .map(todo => ToDoResponse(todo.id, todo.title, todo.description))
+
   def getToDos: List[ToDoRow] = todos.toList
 
   def takeToDos(n: Int): List[ToDoRow] = todos.take(n).toList
@@ -24,7 +30,7 @@ class ToDosRepository {
     uuid
   }
 
-  def removeToDo(uuid: UUID): Boolean = {
+  def deleteToDo(uuid: UUID): Boolean = {
     todos.find(_.id == uuid) match {
       case Some(toDo) =>
         todos -= toDo
