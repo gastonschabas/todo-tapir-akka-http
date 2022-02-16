@@ -49,6 +49,7 @@ object Endpoints {
       jsonBody[ToDoResponse]
         .example(ToDoResponse.example1)
     )
+    .errorOut(plainBody[String])
 
   val addToDoEndpoint = todoBaseEndpoint.post
     .description("creates a new ToDo")
@@ -64,12 +65,21 @@ object Endpoints {
         .example(CreateToDoResponse.example1)
     )
 
+  val deleteTodoEndpoint =
+    todoBaseEndpoint
+      .in(auth.bearer)
+      .in(path[UUID]("id"))
+      .delete
+      .out(plainBody[String])
+
   val exposedEndpoints =
     List(
       openAPISpec,
       todoDescriptionEndpoint,
+      getTodoEndpoint,
       getToDosEndpoint,
-      addToDoEndpoint
+      addToDoEndpoint,
+      deleteTodoEndpoint
     )
 
 }
