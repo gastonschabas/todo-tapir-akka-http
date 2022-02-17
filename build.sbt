@@ -1,4 +1,4 @@
-lazy val tapirVersion = "0.11.11"
+lazy val tapirVersion = "0.19.4"
 lazy val akkaVersion = "2.6.18"
 lazy val akkaHttpVersion = "10.2.8"
 lazy val pac4jVersion = "4.5.4"
@@ -28,8 +28,8 @@ lazy val root =
 lazy val endpoints = (project in file("todo-endpoints")).settings(
   name := "todo-endpoints",
   libraryDependencies := Seq(
-    "com.softwaremill.tapir" %% "tapir-core"       % tapirVersion,
-    "com.softwaremill.tapir" %% "tapir-json-circe" % tapirVersion
+    "com.softwaremill.sttp.tapir" %% "tapir-core"       % tapirVersion,
+    "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % tapirVersion
   )
 )
 
@@ -37,8 +37,8 @@ lazy val apiSpec = (project in file("todo-api-spec"))
   .settings(
     name := "todo-api-spec",
     libraryDependencies := Seq(
-      "com.softwaremill.tapir" %% "tapir-openapi-docs"       % tapirVersion,
-      "com.softwaremill.tapir" %% "tapir-openapi-circe-yaml" % tapirVersion
+      "com.softwaremill.sttp.tapir" %% "tapir-openapi-docs" % tapirVersion,
+      "com.softwaremill.sttp.tapir" %% "tapir-openapi-circe-yaml" % tapirVersion
     )
   )
   .dependsOn(endpoints)
@@ -46,10 +46,10 @@ lazy val apiSpec = (project in file("todo-api-spec"))
 lazy val server = (project in file("todo-server"))
   .settings(
     libraryDependencies := Seq(
-      "com.typesafe.akka"      %% "akka-actor-typed"       % akkaVersion,
-      "com.typesafe.akka"      %% "akka-stream"            % akkaVersion,
-      "com.typesafe.akka"      %% "akka-http"              % akkaHttpVersion,
-      "com.softwaremill.tapir" %% "tapir-akka-http-server" % tapirVersion,
+      "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
+      "com.typesafe.akka" %% "akka-stream"      % akkaVersion,
+      "com.typesafe.akka" %% "akka-http"        % akkaHttpVersion,
+      "com.softwaremill.sttp.tapir" %% "tapir-akka-http-server" % tapirVersion,
       "com.typesafe"                % "config"          % typeSafeConfigVersion,
       "com.typesafe.scala-logging" %% "scala-logging"   % scalaLoggingVersion,
       "ch.qos.logback"              % "logback-classic" % logbackVersion,
