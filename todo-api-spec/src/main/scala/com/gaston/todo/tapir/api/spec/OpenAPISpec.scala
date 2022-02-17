@@ -4,12 +4,16 @@ import com.gaston.todo.tapir.endpoint.Endpoints
 
 object OpenAPISpec extends App {
 
-  import tapir.docs.openapi._
-  import tapir.openapi.OpenAPI
-  import tapir.openapi.circe.yaml._
+  import sttp.tapir.docs.openapi.OpenAPIDocsInterpreter
+  import sttp.tapir.openapi.OpenAPI
+  import sttp.tapir.openapi.circe.yaml._
 
   val openAPI: OpenAPI =
-    Endpoints.exposedEndpoints.toOpenAPI("The ToDo API", Endpoints.version)
+    OpenAPIDocsInterpreter().toOpenAPI(
+      Endpoints.exposedEndpoints,
+      "The ToDo API",
+      Endpoints.version
+    )
 
   val yaml = openAPI.toYaml
 
