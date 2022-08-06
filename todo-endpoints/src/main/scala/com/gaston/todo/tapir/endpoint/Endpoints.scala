@@ -1,10 +1,13 @@
 package com.gaston.todo.tapir.endpoint
 
-import com.gaston.todo.tapir.contract.response.ToDoResponse
-import io.circe.generic.auto._
+import com.gaston.todo.tapir.contract.request.CreateToDoRequest
+import com.gaston.todo.tapir.contract.response.{
+  CreateToDoResponse,
+  ToDoResponse
+}
 import sttp.tapir._
 import sttp.tapir.generic.auto._
-import sttp.tapir.json.circe._
+import sttp.tapir.json.play.jsonBody
 
 import java.util.UUID
 
@@ -48,35 +51,33 @@ object Endpoints {
     )
     .errorOut(plainBody[String])
 
-//  val addToDoEndpoint = todoBaseEndpoint.post
-//    .description("creates a new ToDo")
-//    .securityIn(auth.bearer[String])
-//    .securityIn(
-//      jsonBody[CreateToDoRequest]
-//        .description("The ToDo to be saved")
-//        .example(CreateToDoRequest.example1)
-//    )
-//    .out(
-//      jsonBody[CreateToDoResponse]
-//        .description("The ID generated of the saved ToDo")
-//        .example(CreateToDoResponse.example1)
-//    )
+  val addToDoEndpoint = todoBaseEndpoint.post
+    .in(
+      jsonBody[CreateToDoRequest]
+        .description("The ToDo to be saved")
+        .example(CreateToDoRequest.example1)
+    )
+    .description("creates a new ToDo")
+    .out(
+      jsonBody[CreateToDoResponse]
+        .description("The ID generated of the saved ToDo")
+        .example(CreateToDoResponse.example1)
+    )
 
-//  val deleteTodoEndpoint =
-//    todoBaseEndpoint
-//      .securityIn(auth.bearer[String])
-//      .in(path[UUID]("id"))
-//      .delete
-//      .out(plainBody[String])
+  val deleteTodoEndpoint =
+    todoBaseEndpoint
+      .in(path[UUID]("id"))
+      .delete
+      .out(plainBody[String])
 
   val exposedEndpoints =
     List(
       openAPISpec,
       todoDescriptionEndpoint,
       getTodoEndpoint,
-      getToDosEndpoint
-//      addToDoEndpoint,
-//      deleteTodoEndpoint
+      getToDosEndpoint,
+      addToDoEndpoint,
+      deleteTodoEndpoint
     )
 
 }
