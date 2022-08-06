@@ -4,6 +4,6 @@
 .gradle
 .idea
 .bsp
+.sbt_completion_cache
 
 target/
-

@@ -1,5 +1,7 @@
 package com.gaston.todo.tapir.contract.response
 
+import play.api.libs.json.Json
+
 import java.util.UUID
 
 case class ToDoResponse(id: UUID, title: String, description: String)
@@ -16,4 +18,6 @@ object ToDoResponse {
     ""
   )
   val exampleList = List(example1, example2)
+
+  implicit val format = Json.format[ToDoResponse]
 }

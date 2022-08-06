@@ -5,9 +5,9 @@ import com.gaston.todo.tapir.contract.response.{
   CreateToDoResponse,
   ToDoResponse
 }
-import io.circe.generic.auto._
-import tapir._
-import tapir.json.circe._
+import sttp.tapir._
+import sttp.tapir.generic.auto._
+import sttp.tapir.json.play.jsonBody
 
 import java.util.UUID
 
@@ -52,13 +52,12 @@ object Endpoints {
     .errorOut(plainBody[String])
 
   val addToDoEndpoint = todoBaseEndpoint.post
-    .description("creates a new ToDo")
-    .in(auth.bearer)
     .in(
       jsonBody[CreateToDoRequest]
         .description("The ToDo to be saved")
         .example(CreateToDoRequest.example1)
     )
+    .description("creates a new ToDo")
     .out(
       jsonBody[CreateToDoResponse]
         .description("The ID generated of the saved ToDo")
@@ -67,7 +66,6 @@ object Endpoints {
 
   val deleteTodoEndpoint =
     todoBaseEndpoint
-      .in(auth.bearer)
       .in(path[UUID]("id"))
       .delete
       .out(plainBody[String])
