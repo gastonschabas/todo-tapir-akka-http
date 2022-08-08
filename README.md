@@ -3,6 +3,16 @@
 Small project to see how [tapir](https://tapir.softwaremill.com/en/latest/) can be integrated with
 [akka http](https://doc.akka.io/docs/akka-http/current/)
 
+* [ToDo Tapir Akka Http](#todo-tapir-akka-http)
+* [Requirements](#requirements)
+* [Directory structure](#directory-structure)
+* [Running locally](#running-locally)
+    * [Dev Mode](#dev-mode)
+    * [Prod Mode](#prod-mode)
+* [Libraries](#libraries)
+* [Demo](#demo)
+* [API Spec](#api-spec)
+
 # Requirements
 
 - jdk 11
