@@ -1,6 +1,6 @@
 # ToDo Tapir Akka Http
 
-Small project to see how [tapir](https://tapir.softwaremill.com/en/latest/) can be integrated with 
+Small project to see how [tapir](https://tapir.softwaremill.com/en/latest/) can be integrated with
 [akka http](https://doc.akka.io/docs/akka-http/current/)
 
 # Requirements
@@ -14,12 +14,12 @@ Small project to see how [tapir](https://tapir.softwaremill.com/en/latest/) can 
 The project has three modules.
 
 - **todo-endpoints**: the meta description of the endpoints that the REST API have
-- **todo-api-spec**: generates de Open API spec 
+- **todo-api-spec**: generates de Open API spec
 - **todo-server**: the implementation of the server logic
 
 # Running locally
 
-The server can be executed in Dev or Prod mode. The `default port` is `8080`, but it can be overridden if the 
+The server can be executed in Dev or Prod mode. The `default port` is `8080`, but it can be overridden if the
 variable `http.port` is set.
 
 ## Dev Mode
@@ -50,9 +50,11 @@ regular bash script.
 - [tapir](https://tapir.softwaremill.com/en/latest/)
 - [akka http](https://doc.akka.io/docs/akka-http/current/)
 
+# Demo
+
+- The Rest API is deployed in [heroku](https://www.heroku.com/) platform.
+- The demo con be found in [ToDo Tapir Akka Http](https://todo-tapir-akka-http.herokuapp.com/)
+
 # API Spec
 
-|URI|query params|result|
-|---|------------|------|
-|**/api/v0.0**|No|a brief of the API|
-|**/api/v0.0/todo**|**limit**: a number limiting the total of the ToDos returned|a list of the pending ToDos|
+- [Open API Spec](https://todo-tapir-akka-http.herokuapp.com/api/v0.0/spec)

@@ -58,7 +58,9 @@ lazy val server = (project in file("todo-server"))
       "org.pac4j"                   % "pac4j-jwt"       % pac4jVersion,
       "com.stackstate"             %% "akka-http-pac4j" % pac4jAkkaHttpVersion
     ),
-    Compile / run / mainClass := Some("com.gaston.todo.tapir.server.Server")
+    Compile / run / mainClass := Some("com.gaston.todo.tapir.server.Server"),
+    laikaSite / target := baseDirectory.value.getAbsoluteFile / "src" / "main" / "resources" / "html"
   )
   .dependsOn(endpoints, apiSpec)
   .enablePlugins(JavaAppPackaging)
+  .enablePlugins(LaikaPlugin)

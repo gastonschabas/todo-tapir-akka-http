@@ -1,5 +1,8 @@
 package com.gaston.todo.tapir.server.route
 
+import akka.http.scaladsl.model.ContentTypes
+import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.Route
 import com.gaston.todo.tapir.api.spec.OpenAPISpec
 import com.gaston.todo.tapir.contract.response.{
   CreateToDoResponse,
@@ -13,6 +16,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class Routes(toDosRepository: ToDosRepository) {
+
+  private val indexEndpoint = pathSingleSlash(
+    getFromResource("html/index.html", ContentTypes.`text/html(UTF-8)`)
+  )
+
+  private val assetsPath =
+    path("helium" / Remaining)(file => getFromResource(s"html/helium/$file"))
 
   private val openAPISpec = Endpoints.openAPISpec.serverLogic[Future](_ =>
     Future.successful(Right(OpenAPISpec.yaml))
@@ -69,14 +79,16 @@ class Routes(toDosRepository: ToDosRepository) {
       else Future(Right(s"ToDo $id was not deleted"))
     }
 
-  val routes =
+  lazy val routes: Route =
     AkkaHttpServerInterpreter().toRoute(
       List(
         openAPISpec,
         todoDescriptionEndpoint,
         getToDosEndpoint,
-        getTodoEndpoint
+        getTodoEndpoint,
+        addToDoEndpoint,
+        deleteToDoEndpoint
       )
-    )
+    ) ~ indexEndpoint ~ assetsPath
 
 }
