@@ -1,6 +1,4 @@
 import laika.helium.Helium
-import laika.helium.config.Favicon
-import laika.ast.Path.Root
 
 lazy val tapirVersion = "1.0.3"
 lazy val openAPICirceYamlVersion = "0.2.1"
