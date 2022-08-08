@@ -1,3 +1,7 @@
+import laika.helium.Helium
+import laika.helium.config.Favicon
+import laika.ast.Path.Root
+
 lazy val tapirVersion = "1.0.3"
 lazy val openAPICirceYamlVersion = "0.2.1"
 lazy val akkaVersion = "2.6.19"
@@ -59,7 +63,16 @@ lazy val server = (project in file("todo-server"))
       "com.stackstate"             %% "akka-http-pac4j" % pac4jAkkaHttpVersion
     ),
     Compile / run / mainClass := Some("com.gaston.todo.tapir.server.Server"),
-    laikaSite / target := baseDirectory.value.getAbsoluteFile / "src" / "main" / "resources" / "html"
+    laikaSite / target := baseDirectory.value.getAbsoluteFile / "src" / "main" / "resources" / "html",
+    laikaTheme := Helium.defaults.all
+      .metadata(
+        title = Some("ToDo API"),
+        description = Some("A Simple Rest API to manage ToDo tasks"),
+        authors = List("Gastón Schabas"),
+        language = Some("en-US"),
+        version = Some(version.value)
+      )
+      .build
   )
   .dependsOn(endpoints, apiSpec)
   .enablePlugins(JavaAppPackaging)
