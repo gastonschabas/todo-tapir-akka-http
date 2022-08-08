@@ -20,11 +20,11 @@ object Server extends App {
   val routes = new Routes(toDosRepository)
   implicit val actorSystem: ActorSystem = ActorSystem()
 
-  logger.info(s"starting server at $port")
+  logger.info(s"starting server at http://localhost:$port/")
   Http()
     .newServerAt("0.0.0.0", port)
     .bindFlow(routes.routes)
-    .map(_ => logger.info(s"server at $port"))
+    .foreach(_ => logger.info(s"started server at http://localhost:$port/"))
 
   StdIn.readLine()
 

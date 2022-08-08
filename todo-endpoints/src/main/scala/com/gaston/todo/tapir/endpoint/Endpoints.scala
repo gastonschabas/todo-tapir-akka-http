@@ -15,6 +15,10 @@ object Endpoints {
 
   val version = "v0.0"
 
+  val indexEndpoint = endpoint
+    .out(htmlBodyUtf8)
+    .description("The index page with some details")
+
   val baseEndpointV0 = endpoint.in("api" / version)
 
   val todoBaseEndpoint = baseEndpointV0.in("todo")
@@ -73,7 +77,6 @@ object Endpoints {
   val exposedEndpoints =
     List(
       openAPISpec,
-      todoDescriptionEndpoint,
       getTodoEndpoint,
       getToDosEndpoint,
       addToDoEndpoint,
