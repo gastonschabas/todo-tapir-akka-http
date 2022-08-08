@@ -2,7 +2,7 @@
 
 REST API that will let you add and remove ToDo tasks
 
-## Rest API Spec
+# Rest API Spec
 
 - [Open API Spec](/api/v0.0/spec)
 
@@ -13,6 +13,10 @@ REST API that will let you add and remove ToDo tasks
 - [akka](https://akka.io/): 2.6.19
 - [akka-http](https://doc.akka.io/docs/akka-http/current/index.html): 10.2.9
 
-## Server
+# Server
 
 The API is deployed in [heroku](https://www.heroku.com/) platform.
+
+# Github
+
+- [ToDo Tapir akka-http](https://github.com/gastonschabas/todo-tapir-akka-http)
