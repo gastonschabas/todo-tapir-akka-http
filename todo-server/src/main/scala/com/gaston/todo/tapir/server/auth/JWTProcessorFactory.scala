@@ -2,7 +2,11 @@ package com.gaston.todo.tapir.server.auth
 
 import com.gaston.todo.tapir.server.config.AuthConfig
 import com.nimbusds.jose.jwk.source.RemoteJWKSet
-import com.nimbusds.jose.proc.{DefaultJOSEObjectTypeVerifier, JWSVerificationKeySelector, SecurityContext}
+import com.nimbusds.jose.proc.{
+  DefaultJOSEObjectTypeVerifier,
+  JWSVerificationKeySelector,
+  SecurityContext
+}
 import com.nimbusds.jose.util.DefaultResourceRetriever
 import com.nimbusds.jose.{JOSEObjectType, JWSAlgorithm}
 import com.nimbusds.jwt.proc.{DefaultJWTClaimsVerifier, DefaultJWTProcessor}
