@@ -3,12 +3,11 @@
 Small project to see how [tapir](https://tapir.softwaremill.com/en/latest/) can be integrated with
 [akka http](https://doc.akka.io/docs/akka-http/current/)
 
-* [ToDo Tapir Akka Http](#todo-tapir-akka-http)
 * [Requirements](#requirements)
 * [Directory structure](#directory-structure)
 * [Running locally](#running-locally)
-    * [Dev Mode](#dev-mode)
-    * [Prod Mode](#prod-mode)
+  * [Dev Mode](#dev-mode)
+  * [Prod Mode](#prod-mode)
 * [Libraries](#libraries)
 * [Demo](#demo)
 * [API Spec](#api-spec)
@@ -17,7 +16,7 @@ Small project to see how [tapir](https://tapir.softwaremill.com/en/latest/) can 
 
 - jdk 11
 - scala 2.13.8
-- sbt 1.6.2
+- sbt 1.7.1
 
 # Directory structure
 
@@ -30,7 +29,7 @@ The project has three modules.
 # Running locally
 
 The server can be executed in Dev or Prod mode. The `default port` is `8080`, but it can be overridden if the
-variable `http.port` is set.
+variable `server-config.port` is set.
 
 ## Dev Mode
 
@@ -57,8 +56,10 @@ regular bash script.
 
 # Libraries
 
-- [tapir](https://tapir.softwaremill.com/en/latest/)
-- [akka http](https://doc.akka.io/docs/akka-http/current/)
+- [Tapir](https://tapir.softwaremill.com/en/latest/): 1.0.3
+- [akka](https://akka.io/): 2.6.19
+- [akka-http](https://doc.akka.io/docs/akka-http/current/index.html): 10.2.9
+- [Nimbus Jose JWT](https://connect2id.com/products/nimbus-jose-jwt): 9.23
 
 # Demo
 

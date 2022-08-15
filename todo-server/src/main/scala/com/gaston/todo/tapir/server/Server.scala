@@ -2,6 +2,7 @@ package com.gaston.todo.tapir.server
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
+import com.gaston.todo.tapir.server.auth.Authentication
 import com.gaston.todo.tapir.server.config.AppConfig
 import com.gaston.todo.tapir.server.repository.ToDosRepository
 import com.gaston.todo.tapir.server.route.Routes
@@ -21,9 +22,10 @@ object Server extends App {
   }
 
   val toDosRepository = new ToDosRepository
+  val authentication = new Authentication(appConfig = appConfig)
   val logger = Logger(this.getClass.getName)
   val serverConfig = appConfig.serverConfig
-  val routes = new Routes(toDosRepository)
+  val routes = new Routes(toDosRepository, authentication)
   implicit val actorSystem: ActorSystem = ActorSystem()
 
   logger.info(s"starting server at http://localhost:${serverConfig.port}/")

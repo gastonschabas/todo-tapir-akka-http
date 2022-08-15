@@ -1,8 +1,10 @@
 package com.gaston.todo.tapir.endpoint
 
+import com.gaston.todo.tapir.contract.auth.BearerToken
 import com.gaston.todo.tapir.contract.request.CreateToDoRequest
 import com.gaston.todo.tapir.contract.response.{
   CreateToDoResponse,
+  ErrorInfo,
   ToDoResponse
 }
 import sttp.tapir._
@@ -22,6 +24,11 @@ object Endpoints {
   val baseEndpointV0 = endpoint.in("api" / version)
 
   val todoBaseEndpoint = baseEndpointV0.in("todo")
+
+  val todosSecuredBaseEndpoint =
+    todoBaseEndpoint
+      .securityIn(auth.bearer[String]().mapTo[BearerToken])
+      .errorOut(jsonBody[ErrorInfo])
 
   val todoDescriptionEndpoint = baseEndpointV0.get
     .description("Give details about the purpose of this API")
@@ -45,6 +52,7 @@ object Endpoints {
       jsonBody[List[ToDoResponse]]
         .example(ToDoResponse.exampleList)
     )
+    .errorOut(jsonBody[ErrorInfo])
 
   val getTodoEndpoint = todoBaseEndpoint.get
     .description("The Todo")
@@ -55,7 +63,7 @@ object Endpoints {
     )
     .errorOut(plainBody[String])
 
-  val addToDoEndpoint = todoBaseEndpoint.post
+  val addToDoEndpoint = todosSecuredBaseEndpoint.post
     .in(
       jsonBody[CreateToDoRequest]
         .description("The ToDo to be saved")
@@ -69,7 +77,7 @@ object Endpoints {
     )
 
   val deleteTodoEndpoint =
-    todoBaseEndpoint
+    todosSecuredBaseEndpoint
       .in(path[UUID]("id"))
       .delete
       .out(plainBody[String])
