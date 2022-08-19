@@ -16,10 +16,8 @@ import com.gaston.todo.tapir.server.auth.Authentication
 import com.gaston.todo.tapir.server.repository.{ToDoVO, ToDosRepository}
 import sttp.tapir.Endpoint
 import sttp.tapir.server.PartialServerEndpoint
-import sttp.tapir.server.ServerEndpoint.Full
 import sttp.tapir.server.akkahttp.AkkaHttpServerInterpreter
 
-import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
@@ -49,8 +47,8 @@ class Routes(toDosRepository: ToDosRepository, authentication: Authentication) {
     )
 
   private val getToDosEndpoint =
-    Endpoints.getToDosEndpoint
-      .serverLogic[Future] { req =>
+    secureEndpoint(Endpoints.getToDosEndpoint)
+      .serverLogic { _ => req =>
         req match {
           case Some(limit) =>
             Future.successful(
@@ -71,12 +69,26 @@ class Routes(toDosRepository: ToDosRepository, authentication: Authentication) {
         }
       }
 
-  private val getTodoEndpoint
-    : Full[Unit, Unit, UUID, String, ToDoResponse, Any, Future] =
-    Endpoints.getTodoEndpoint.serverLogic[Future] { id =>
+  private val getTodoEndpoint =
+    secureEndpoint(Endpoints.getTodoEndpoint).serverLogic { _ => id =>
       toDosRepository.getToDo(id) match {
         case Some(todo) => Future(Right(todo))
-        case None => Future(Left(s"ToDo $id was not found"))
+        case None =>
+          Future(
+            Left(
+              ErrorInfo(
+                "todo.not.found",
+                404,
+                List(
+                  ErrorMessage(
+                    "todo.id.not.exist",
+                    s"ToDo $id was not found",
+                    ""
+                  )
+                )
+              )
+            )
+          )
       }
     }
 
