@@ -48,13 +48,13 @@ class Routes(toDosRepository: ToDosRepository, authentication: Authentication) {
 
   private val getToDosEndpoint =
     secureEndpoint(Endpoints.getToDosEndpoint)
-      .serverLogic { _ => req =>
-        req match {
+      .serverLogic { token =>
+        {
           case Some(limit) =>
             Future.successful(
               Right(
-                (if (limit < 1) toDosRepository.takeToDos(1)
-                 else toDosRepository.takeToDos(limit))
+                (if (limit < 1) toDosRepository.takeToDos(token.subject, 1)
+                 else toDosRepository.takeToDos(token.subject, limit))
                   .map(row => ToDoResponse(row.id, row.title, row.description))
               )
             )
@@ -62,7 +62,7 @@ class Routes(toDosRepository: ToDosRepository, authentication: Authentication) {
             Future.successful(
               Right(
                 toDosRepository
-                  .takeToDos(5)
+                  .takeToDos(token.subject, 5)
                   .map(row => ToDoResponse(row.id, row.title, row.description))
               )
             )
@@ -70,8 +70,8 @@ class Routes(toDosRepository: ToDosRepository, authentication: Authentication) {
       }
 
   private val getTodoEndpoint =
-    secureEndpoint(Endpoints.getTodoEndpoint).serverLogic { _ => id =>
-      toDosRepository.getToDo(id) match {
+    secureEndpoint(Endpoints.getTodoEndpoint).serverLogic { token => id =>
+      toDosRepository.getToDo(token.subject, id) match {
         case Some(todo) => Future(Right(todo))
         case None =>
           Future(
@@ -92,16 +92,19 @@ class Routes(toDosRepository: ToDosRepository, authentication: Authentication) {
       }
     }
 
-  val addToDoEndpoint =
-    secureEndpoint(Endpoints.addToDoEndpoint).serverLogic { _ => toDo =>
+  private val addToDoEndpoint =
+    secureEndpoint(Endpoints.addToDoEndpoint).serverLogic { token => toDo =>
       val id =
-        toDosRepository.addToDo(ToDoVO(toDo.title, toDo.description))
+        toDosRepository.addToDo(
+          token.subject,
+          ToDoVO(toDo.title, toDo.description)
+        )
       Future(Right(CreateToDoResponse(id)))
     }
 
-  val deleteToDoEndpoint =
-    secureEndpoint(Endpoints.deleteTodoEndpoint).serverLogic { _ => id =>
-      val wasDeleted = toDosRepository.deleteToDo(id)
+  private val deleteToDoEndpoint =
+    secureEndpoint(Endpoints.deleteTodoEndpoint).serverLogic { token => id =>
+      val wasDeleted = toDosRepository.deleteToDo(token.subject, id)
       if (wasDeleted) Future(Right(s"ToDo $id was deleted"))
       else Future(Right(s"ToDo $id was not deleted"))
     }
