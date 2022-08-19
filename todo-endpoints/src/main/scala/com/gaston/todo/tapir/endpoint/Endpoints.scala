@@ -43,7 +43,7 @@ object Endpoints {
     .description("It shows the Open API spec of this API")
     .out(stringBody)
 
-  val getToDosEndpoint = todoBaseEndpoint.get
+  val getToDosEndpoint = todosSecuredBaseEndpoint.get
     .description("The list of ToDos")
     .in(
       query[Option[Int]]("limit").description("Set the limit of ToDos returned")
@@ -52,16 +52,14 @@ object Endpoints {
       jsonBody[List[ToDoResponse]]
         .example(ToDoResponse.exampleList)
     )
-    .errorOut(jsonBody[ErrorInfo])
 
-  val getTodoEndpoint = todoBaseEndpoint.get
+  val getTodoEndpoint = todosSecuredBaseEndpoint.get
     .description("The Todo")
     .in(path[UUID]("id").description("The ID of the ToDo"))
     .out(
       jsonBody[ToDoResponse]
         .example(ToDoResponse.example1)
     )
-    .errorOut(plainBody[String])
 
   val addToDoEndpoint = todosSecuredBaseEndpoint.post
     .in(

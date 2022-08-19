@@ -16,10 +16,8 @@ import com.gaston.todo.tapir.server.auth.Authentication
 import com.gaston.todo.tapir.server.repository.{ToDoVO, ToDosRepository}
 import sttp.tapir.Endpoint
 import sttp.tapir.server.PartialServerEndpoint
-import sttp.tapir.server.ServerEndpoint.Full
 import sttp.tapir.server.akkahttp.AkkaHttpServerInterpreter
 
-import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
@@ -49,14 +47,14 @@ class Routes(toDosRepository: ToDosRepository, authentication: Authentication) {
     )
 
   private val getToDosEndpoint =
-    Endpoints.getToDosEndpoint
-      .serverLogic[Future] { req =>
-        req match {
+    secureEndpoint(Endpoints.getToDosEndpoint)
+      .serverLogic { token =>
+        {
           case Some(limit) =>
             Future.successful(
               Right(
-                (if (limit < 1) toDosRepository.takeToDos(1)
-                 else toDosRepository.takeToDos(limit))
+                (if (limit < 1) toDosRepository.takeToDos(token.subject, 1)
+                 else toDosRepository.takeToDos(token.subject, limit))
                   .map(row => ToDoResponse(row.id, row.title, row.description))
               )
             )
@@ -64,32 +62,49 @@ class Routes(toDosRepository: ToDosRepository, authentication: Authentication) {
             Future.successful(
               Right(
                 toDosRepository
-                  .takeToDos(5)
+                  .takeToDos(token.subject, 5)
                   .map(row => ToDoResponse(row.id, row.title, row.description))
               )
             )
         }
       }
 
-  private val getTodoEndpoint
-    : Full[Unit, Unit, UUID, String, ToDoResponse, Any, Future] =
-    Endpoints.getTodoEndpoint.serverLogic[Future] { id =>
-      toDosRepository.getToDo(id) match {
+  private val getTodoEndpoint =
+    secureEndpoint(Endpoints.getTodoEndpoint).serverLogic { token => id =>
+      toDosRepository.getToDo(token.subject, id) match {
         case Some(todo) => Future(Right(todo))
-        case None => Future(Left(s"ToDo $id was not found"))
+        case None =>
+          Future(
+            Left(
+              ErrorInfo(
+                "todo.not.found",
+                404,
+                List(
+                  ErrorMessage(
+                    "todo.id.not.exist",
+                    s"ToDo $id was not found",
+                    ""
+                  )
+                )
+              )
+            )
+          )
       }
     }
 
-  val addToDoEndpoint =
-    secureEndpoint(Endpoints.addToDoEndpoint).serverLogic { _ => toDo =>
+  private val addToDoEndpoint =
+    secureEndpoint(Endpoints.addToDoEndpoint).serverLogic { token => toDo =>
       val id =
-        toDosRepository.addToDo(ToDoVO(toDo.title, toDo.description))
+        toDosRepository.addToDo(
+          token.subject,
+          ToDoVO(toDo.title, toDo.description)
+        )
       Future(Right(CreateToDoResponse(id)))
     }
 
-  val deleteToDoEndpoint =
-    secureEndpoint(Endpoints.deleteTodoEndpoint).serverLogic { _ => id =>
-      val wasDeleted = toDosRepository.deleteToDo(id)
+  private val deleteToDoEndpoint =
+    secureEndpoint(Endpoints.deleteTodoEndpoint).serverLogic { token => id =>
+      val wasDeleted = toDosRepository.deleteToDo(token.subject, id)
       if (wasDeleted) Future(Right(s"ToDo $id was deleted"))
       else Future(Right(s"ToDo $id was not deleted"))
     }

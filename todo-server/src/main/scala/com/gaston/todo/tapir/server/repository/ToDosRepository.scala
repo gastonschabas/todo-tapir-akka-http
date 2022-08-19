@@ -3,40 +3,45 @@ package com.gaston.todo.tapir.server.repository
 import com.gaston.todo.tapir.contract.response.ToDoResponse
 
 import java.util.UUID
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.{ListBuffer, Map}
 
 class ToDosRepository {
-  private val todos = ListBuffer(
-    ToDoRow(UUID.randomUUID(), "1 ToDo title", "1 ToDo description"),
-    ToDoRow(UUID.randomUUID(), "2 ToDo title", "2 ToDo description"),
-    ToDoRow(UUID.randomUUID(), "3 ToDo title", "3 ToDo description"),
-    ToDoRow(UUID.randomUUID(), "4 ToDo title", "4 ToDo description"),
-    ToDoRow(UUID.randomUUID(), "5 ToDo title", "5 ToDo description"),
-    ToDoRow(UUID.randomUUID(), "6 ToDo title", "6 ToDo description"),
-    ToDoRow(UUID.randomUUID(), "7 ToDo title", "7 ToDo description")
-  )
 
-  def getToDo(id: UUID): Option[ToDoResponse] = todos
-    .find(_.id == id)
-    .map(todo => ToDoResponse(todo.id, todo.title, todo.description))
+  private val toDosRepo: Map[String, ListBuffer[ToDoRow]] = Map.empty
 
-  def getToDos: List[ToDoRow] = todos.toList
+  def getToDo(user: String, id: UUID): Option[ToDoResponse] = {
+    toDosRepo
+      .get(user)
+      .flatMap(
+        _.find(_.id == id)
+          .map(todo => ToDoResponse(todo.id, todo.title, todo.description))
+      )
+  }
 
-  def takeToDos(n: Int): List[ToDoRow] = todos.take(n).toList
+  def takeToDos(user: String, n: Int): List[ToDoRow] =
+    toDosRepo.get(user).map(_.take(n).toList).getOrElse(List.empty)
 
-  def addToDo(toDo: ToDoVO): UUID = {
+  def addToDo(user: String, toDo: ToDoVO): UUID = {
     val uuid = UUID.randomUUID()
-    todos += ToDoRow(uuid, toDo.title, toDo.description)
+    val toDoRow = ToDoRow(uuid, toDo.title, toDo.description)
+    toDosRepo.get(user) match {
+      case Some(value) => value += toDoRow
+      case None => toDosRepo.put(user, ListBuffer(toDoRow))
+    }
     uuid
   }
 
-  def deleteToDo(uuid: UUID): Boolean = {
-    todos.find(_.id == uuid) match {
-      case Some(toDo) =>
-        todos -= toDo
-        true
-      case None =>
-        false
+  def deleteToDo(user: String, uuid: UUID): Boolean = {
+    toDosRepo.get(user) match {
+      case Some(value) =>
+        value.find(_.id == uuid) match {
+          case Some(toDo) =>
+            value -= toDo
+            true
+          case None =>
+            false
+        }
+      case None => false
     }
   }
 }
