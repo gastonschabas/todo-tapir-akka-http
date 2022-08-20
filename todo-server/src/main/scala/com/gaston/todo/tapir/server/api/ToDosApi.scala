@@ -139,37 +139,11 @@ class ToDosApi(
       .serverSecurityLogic[UserAuthenticated, Future] { bearerToken =>
         Future {
           authentication.validateToken(bearerToken) match {
-            case Failure(_) =>
-              Left[ErrorInfo, UserAuthenticated](
-                ErrorInfo(
-                  "access.denied",
-                  401,
-                  List(
-                    ErrorMessage(
-                      "token.invalid",
-                      "bearer token provided is invalid",
-                      "header.authentication"
-                    )
-                  )
-                )
-              )
+            case Failure(_) => Left(ErrorInfo.AccessDenied)
             case Success(userAuthenticated)
                 if userAuthenticated.permissions.nonEmpty =>
               Right(userAuthenticated)
-            case Success(_) =>
-              Left(
-                ErrorInfo(
-                  "access.forbidden",
-                  403,
-                  List(
-                    ErrorMessage(
-                      "token.forbidden",
-                      s"permission read required",
-                      "header.authorization"
-                    )
-                  )
-                )
-              )
+            case Success(_) => Left(ErrorInfo.AccessForbidden)
           }
         }
       }
