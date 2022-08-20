@@ -81,7 +81,7 @@ lazy val server = (project in file("todo-server"))
       "com.typesafe.akka" %% "akka-http-testkit"   % akkaHttpVersion  % Test,
       "de.heikoseeberger" %% "akka-http-play-json" % akkaHttpPlayJsonVersion % Test
     ),
-    Compile / run / mainClass := Some("com.gaston.todo.tapir.server.Server"),
+    Compile / run / mainClass := Some("com.gaston.todo.tapir.server.Main"),
     laikaSite / target := baseDirectory.value.getAbsoluteFile / "src" / "main" / "resources" / "html",
     laikaTheme := Helium.defaults.all
       .metadata(
