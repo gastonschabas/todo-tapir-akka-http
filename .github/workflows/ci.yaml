@@ -23,4 +23,4 @@ jobs:
         with:
           java-version: 11
       - name: Validate Scala Format
-        run: sbt clean compile scalafmtCheckAll scalafmtSbtCheck
+        run: sbt clean compile scalafmtCheckAll scalafmtSbtCheck test
