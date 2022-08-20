@@ -10,6 +10,7 @@ lazy val scalaLoggingVersion = "3.9.5"
 lazy val logbackVersion = "1.2.11"
 lazy val nimbusJoseJWTVersion = "9.23"
 lazy val pureConfigVersion = "0.17.1"
+lazy val macwireVersion = "2.5.7"
 
 lazy val root =
   (project in file("."))
@@ -71,7 +72,8 @@ lazy val server = (project in file("todo-server"))
       "com.typesafe.scala-logging" %% "scala-logging"   % scalaLoggingVersion,
       "ch.qos.logback"              % "logback-classic" % logbackVersion,
       "com.nimbusds"                % "nimbus-jose-jwt" % nimbusJoseJWTVersion,
-      "com.github.pureconfig"      %% "pureconfig"      % pureConfigVersion
+      "com.github.pureconfig"      %% "pureconfig"      % pureConfigVersion,
+      "com.softwaremill.macwire"   %% "macros"          % macwireVersion
     ),
     Compile / run / mainClass := Some("com.gaston.todo.tapir.server.Server"),
     laikaSite / target := baseDirectory.value.getAbsoluteFile / "src" / "main" / "resources" / "html",
