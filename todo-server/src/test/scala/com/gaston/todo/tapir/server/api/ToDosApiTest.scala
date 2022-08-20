@@ -4,16 +4,10 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import com.gaston.todo.tapir.contract.auth.{BearerToken, UserAuthenticated}
 import com.gaston.todo.tapir.contract.request.CreateToDoRequest
-import com.gaston.todo.tapir.contract.response.{
-  CreateToDoResponse,
-  ToDoResponse
-}
+import com.gaston.todo.tapir.contract.response.{CreateToDoResponse, ErrorInfo, ToDoResponse}
 import com.gaston.todo.tapir.server.auth.Authentication
 import com.gaston.todo.tapir.server.config.AppConfig
-import com.gaston.todo.tapir.server.repository.{
-  ToDosRepository,
-  ToDosRepositoryInMemory
-}
+import com.gaston.todo.tapir.server.repository.{ToDosRepository, ToDosRepositoryInMemory}
 import com.softwaremill.macwire.wire
 import de.heikoseeberger.akkahttpplayjson.PlayJsonSupport
 import org.scalatest.funsuite.AnyFunSuite
@@ -88,6 +82,76 @@ class ToDosApiTest
           )
         )
         status should be(StatusCodes.OK)
+      }
+    }
+  }
+
+  test("add, remove and get a todo task should return an empty list") {
+    val fixture = baseFixture
+    val routes = fixture.toDosApi.routes
+    val todoRequest = CreateToDoRequest("a todo", "a simple todo")
+    Post(
+      s"/api/v0.0/todo",
+      todoRequest
+    ) ~> fixture.authHeader ~> routes ~> check {
+      status should be(StatusCodes.OK)
+      val response = responseAs[CreateToDoResponse]
+      Delete(
+        s"/api/v0.0/todo/${response.id}"
+      ) ~> fixture.authHeader ~> routes ~> check {
+        status should be(StatusCodes.OK)
+        Get(s"/api/v0.0/todo") ~> fixture.authHeader ~> routes ~> check {
+          val toDoList = responseAs[List[ToDoResponse]]
+          toDoList should be(Nil)
+          status should be(StatusCodes.OK)
+        }
+      }
+    }
+  }
+
+  test("when a todo task is saved it should be able to be queried") {
+    val fixture = baseFixture
+    val routes = fixture.toDosApi.routes
+    val todoRequest = CreateToDoRequest("a todo", "a simple todo")
+    Post(
+      s"/api/v0.0/todo",
+      todoRequest
+    ) ~> fixture.authHeader ~> routes ~> check {
+      status should be(StatusCodes.OK)
+      val response = responseAs[CreateToDoResponse]
+      Get(
+        s"/api/v0.0/todo/${response.id}"
+      ) ~> fixture.authHeader ~> routes ~> check {
+        val toDoList = responseAs[ToDoResponse]
+        toDoList should be(
+          ToDoResponse(response.id, todoRequest.title, todoRequest.description)
+        )
+        status should be(StatusCodes.OK)
+      }
+    }
+  }
+
+  test("when a todo task is saved and then delete it, it should not be able to be queried") {
+    val fixture = baseFixture
+    val routes = fixture.toDosApi.routes
+    val todoRequest = CreateToDoRequest("a todo", "a simple todo")
+    Post(
+      s"/api/v0.0/todo",
+      todoRequest
+    ) ~> fixture.authHeader ~> routes ~> check {
+      status should be(StatusCodes.OK)
+      val response = responseAs[CreateToDoResponse]
+      Delete(
+        s"/api/v0.0/todo/${response.id}"
+      ) ~> fixture.authHeader ~> routes ~> check {
+        Get(
+          s"/api/v0.0/todo/${response.id}"
+        ) ~> fixture.authHeader ~> routes ~> check {
+          val errorInfo = responseAs[ErrorInfo]
+          errorInfo.status should be(StatusCodes.NotFound.intValue)
+          errorInfo.errors should not be Nil
+          status should be(StatusCodes.BadRequest)
+        }
       }
     }
   }
