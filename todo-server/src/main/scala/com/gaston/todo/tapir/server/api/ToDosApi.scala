@@ -1,4 +1,4 @@
-package com.gaston.todo.tapir.server.route
+package com.gaston.todo.tapir.server.api
 
 import akka.http.scaladsl.model.ContentTypes
 import akka.http.scaladsl.server.Directives._
@@ -22,7 +22,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-class Routes(toDosRepository: ToDosRepository, authentication: Authentication) {
+class ToDosApi(
+  toDosRepository: ToDosRepository,
+  authentication: Authentication
+) {
 
   private val indexEndpoint = pathSingleSlash(
     getFromResource("html/index.html", ContentTypes.`text/html(UTF-8)`)
