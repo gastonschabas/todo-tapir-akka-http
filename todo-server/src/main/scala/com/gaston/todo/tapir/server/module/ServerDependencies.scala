@@ -21,11 +21,13 @@ trait ServerDependencies {
     case Right(config) => config
   }
 
+  implicit val actorSystem: ActorSystem = ActorSystem()
+  implicit val ec = actorSystem.dispatcher
+
   val toDosRepository: ToDosRepository = wire[ToDosRepositoryInMemory]
   val authentication: Authentication = wire[AuthenticationImpl]
   val logger = Logger(this.getClass.getName)
   val serverConfig = appConfig.serverConfig
   val toDosApi = wire[ToDosApi]
-  implicit val actorSystem: ActorSystem = ActorSystem()
 
 }

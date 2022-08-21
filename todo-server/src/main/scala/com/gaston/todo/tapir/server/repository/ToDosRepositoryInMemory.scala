@@ -4,12 +4,14 @@ import com.gaston.todo.tapir.contract.response.ToDoResponse
 
 import java.util.UUID
 import scala.collection.mutable.{ListBuffer, Map}
+import scala.concurrent.{ExecutionContext, Future}
 
-class ToDosRepositoryInMemory extends ToDosRepository {
+class ToDosRepositoryInMemory(implicit ec: ExecutionContext)
+    extends ToDosRepository {
 
   private val toDosRepo: Map[String, ListBuffer[ToDoRow]] = Map.empty
 
-  def getToDo(user: String, id: UUID): Option[ToDoResponse] = {
+  def getToDo(user: String, id: UUID): Future[Option[ToDoResponse]] = Future {
     toDosRepo
       .get(user)
       .flatMap(
@@ -18,10 +20,10 @@ class ToDosRepositoryInMemory extends ToDosRepository {
       )
   }
 
-  def takeToDos(user: String, n: Int): List[ToDoRow] =
-    toDosRepo.get(user).map(_.take(n).toList).getOrElse(List.empty)
+  def takeToDos(user: String, n: Int): Future[List[ToDoRow]] =
+    Future(toDosRepo.get(user).map(_.take(n).toList).getOrElse(List.empty))
 
-  def addToDo(user: String, toDo: ToDoVO): UUID = {
+  def addToDo(user: String, toDo: ToDoVO): Future[UUID] = Future {
     val uuid = UUID.randomUUID()
     val toDoRow = ToDoRow(uuid, toDo.title, toDo.description)
     toDosRepo.get(user) match {
@@ -31,7 +33,7 @@ class ToDosRepositoryInMemory extends ToDosRepository {
     uuid
   }
 
-  def deleteToDo(user: String, uuid: UUID): Boolean = {
+  def deleteToDo(user: String, uuid: UUID): Future[Boolean] = Future {
     toDosRepo.get(user) match {
       case Some(value) =>
         value.find(_.id == uuid) match {
