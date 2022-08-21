@@ -2,6 +2,8 @@ package com.gaston.todo.tapir.contract.response
 
 import play.api.libs.json.Json
 
+import java.util.UUID
+
 case class ErrorMessage(id: String, description: String, path: String)
 object ErrorMessage {
   implicit val format = Json.format[ErrorMessage]
@@ -33,5 +35,11 @@ object ErrorInfo {
         "header.authorization"
       )
     )
+  )
+
+  def toDoIdNotFound(id: UUID) = ErrorInfo(
+    "todo.not.found",
+    404,
+    List(ErrorMessage("todo.id.not.exist", s"ToDo $id was not found", ""))
   )
 }
