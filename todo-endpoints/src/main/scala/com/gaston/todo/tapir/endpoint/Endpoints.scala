@@ -7,6 +7,7 @@ import com.gaston.todo.tapir.contract.response.{
   ErrorInfo,
   ToDoResponse
 }
+import sttp.model.StatusCode
 import sttp.tapir._
 import sttp.tapir.generic.auto._
 import sttp.tapir.json.play.jsonBody
@@ -28,7 +29,14 @@ object Endpoints {
   val todosSecuredBaseEndpoint =
     todoBaseEndpoint
       .securityIn(auth.bearer[String]().mapTo[BearerToken])
-      .errorOut(jsonBody[ErrorInfo])
+      .errorOut(
+        oneOf[ErrorInfo](
+          matchErrorOutput(StatusCode.BadRequest),
+          matchErrorOutput(StatusCode.Unauthorized),
+          matchErrorOutput(StatusCode.Forbidden),
+          matchErrorOutput(StatusCode.NotFound)
+        )
+      )
 
   val todoDescriptionEndpoint = baseEndpointV0.get
     .description("Give details about the purpose of this API")
@@ -88,5 +96,14 @@ object Endpoints {
       addToDoEndpoint,
       deleteTodoEndpoint
     )
+
+  private def matchErrorOutput(
+    statusCode: StatusCode
+  ): EndpointOutput.OneOfVariant[ErrorInfo] = {
+    oneOfVariantValueMatcher(statusCode, jsonBody[ErrorInfo]) {
+      case ErrorInfo(_, status, _) =>
+        status == statusCode.code
+    }
+  }
 
 }
