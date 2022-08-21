@@ -8,7 +8,6 @@ import com.gaston.todo.tapir.contract.auth.{BearerToken, UserAuthenticated}
 import com.gaston.todo.tapir.contract.response.{
   CreateToDoResponse,
   ErrorInfo,
-  ErrorMessage,
   ToDoResponse
 }
 import com.gaston.todo.tapir.endpoint.Endpoints
@@ -76,22 +75,7 @@ class ToDosApi(
     secureEndpoint(Endpoints.getTodoEndpoint).serverLogic { token => id =>
       toDosRepository.getToDo(token.subject, id) match {
         case Some(todo) => Future(Right(todo))
-        case None =>
-          Future(
-            Left(
-              ErrorInfo(
-                "todo.not.found",
-                404,
-                List(
-                  ErrorMessage(
-                    "todo.id.not.exist",
-                    s"ToDo $id was not found",
-                    ""
-                  )
-                )
-              )
-            )
-          )
+        case None => Future(Left(ErrorInfo.toDoIdNotFound(id)))
       }
     }
 
@@ -109,7 +93,7 @@ class ToDosApi(
     secureEndpoint(Endpoints.deleteTodoEndpoint).serverLogic { token => id =>
       val wasDeleted = toDosRepository.deleteToDo(token.subject, id)
       if (wasDeleted) Future(Right(s"ToDo $id was deleted"))
-      else Future(Right(s"ToDo $id was not deleted"))
+      else Future(Left(ErrorInfo.toDoIdNotFound(id)))
     }
 
   lazy val routes: Route =
