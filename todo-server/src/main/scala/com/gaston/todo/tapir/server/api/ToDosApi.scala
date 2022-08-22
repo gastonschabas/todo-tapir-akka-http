@@ -8,7 +8,6 @@ import com.gaston.todo.tapir.contract.auth.{BearerToken, UserAuthenticated}
 import com.gaston.todo.tapir.contract.response.{
   CreateToDoResponse,
   ErrorInfo,
-  ErrorMessage,
   ToDoResponse
 }
 import com.gaston.todo.tapir.endpoint.Endpoints
@@ -54,62 +53,52 @@ class ToDosApi(
       .serverLogic { token =>
         {
           case Some(limit) =>
-            Future.successful(
-              Right(
-                (if (limit < 1) toDosRepository.takeToDos(token.subject, 1)
-                 else toDosRepository.takeToDos(token.subject, limit))
-                  .map(row => ToDoResponse(row.id, row.title, row.description))
+            (if (limit < 1) toDosRepository.takeToDos(token.subject, 1)
+             else toDosRepository.takeToDos(token.subject, limit))
+              .map(listToDoRows =>
+                Right(
+                  listToDoRows.map(toDo =>
+                    ToDoResponse(toDo.id, toDo.title, toDo.description)
+                  )
+                )
               )
-            )
           case None =>
-            Future.successful(
-              Right(
-                toDosRepository
-                  .takeToDos(token.subject, 5)
-                  .map(row => ToDoResponse(row.id, row.title, row.description))
+            toDosRepository
+              .takeToDos(token.subject, 5)
+              .map(listToDoRow =>
+                Right(
+                  listToDoRow.map(row =>
+                    ToDoResponse(row.id, row.title, row.description)
+                  )
+                )
               )
-            )
         }
       }
 
   private val getTodoEndpoint =
     secureEndpoint(Endpoints.getTodoEndpoint).serverLogic { token => id =>
-      toDosRepository.getToDo(token.subject, id) match {
-        case Some(todo) => Future(Right(todo))
-        case None =>
-          Future(
-            Left(
-              ErrorInfo(
-                "todo.not.found",
-                404,
-                List(
-                  ErrorMessage(
-                    "todo.id.not.exist",
-                    s"ToDo $id was not found",
-                    ""
-                  )
-                )
-              )
-            )
-          )
+      toDosRepository.getToDo(token.subject, id).map { toDoResponse =>
+        toDoResponse match {
+          case Some(todo) => Right(todo)
+          case None => Left(ErrorInfo.toDoIdNotFound(id))
+        }
       }
     }
 
   private val addToDoEndpoint =
     secureEndpoint(Endpoints.addToDoEndpoint).serverLogic { token => toDo =>
-      val id =
-        toDosRepository.addToDo(
-          token.subject,
-          ToDoVO(toDo.title, toDo.description)
-        )
-      Future(Right(CreateToDoResponse(id)))
+      toDosRepository
+        .addToDo(token.subject, ToDoVO(toDo.title, toDo.description))
+        .map(id => Right(CreateToDoResponse(id)))
     }
 
   private val deleteToDoEndpoint =
     secureEndpoint(Endpoints.deleteTodoEndpoint).serverLogic { token => id =>
-      val wasDeleted = toDosRepository.deleteToDo(token.subject, id)
-      if (wasDeleted) Future(Right(s"ToDo $id was deleted"))
-      else Future(Right(s"ToDo $id was not deleted"))
+      toDosRepository.deleteToDo(token.subject, id).map { wasDeleted =>
+        if (wasDeleted) Right(s"ToDo $id was deleted")
+        else Left(ErrorInfo.toDoIdNotFound(id))
+      }
+
     }
 
   lazy val routes: Route =
@@ -139,37 +128,11 @@ class ToDosApi(
       .serverSecurityLogic[UserAuthenticated, Future] { bearerToken =>
         Future {
           authentication.validateToken(bearerToken) match {
-            case Failure(_) =>
-              Left[ErrorInfo, UserAuthenticated](
-                ErrorInfo(
-                  "access.denied",
-                  401,
-                  List(
-                    ErrorMessage(
-                      "token.invalid",
-                      "bearer token provided is invalid",
-                      "header.authentication"
-                    )
-                  )
-                )
-              )
+            case Failure(_) => Left(ErrorInfo.AccessDenied)
             case Success(userAuthenticated)
                 if userAuthenticated.permissions.nonEmpty =>
               Right(userAuthenticated)
-            case Success(_) =>
-              Left(
-                ErrorInfo(
-                  "access.forbidden",
-                  403,
-                  List(
-                    ErrorMessage(
-                      "token.forbidden",
-                      s"permission read required",
-                      "header.authorization"
-                    )
-                  )
-                )
-              )
+            case Success(_) => Left(ErrorInfo.AccessForbidden)
           }
         }
       }

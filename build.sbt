@@ -4,6 +4,7 @@ lazy val tapirVersion = "1.0.3"
 lazy val openAPICirceYamlVersion = "0.2.1"
 lazy val akkaVersion = "2.6.19"
 lazy val akkaHttpVersion = "10.2.9"
+lazy val akkaHttpPlayJsonVersion = "1.39.2"
 lazy val pac4jVersion = "4.5.4"
 lazy val pac4jAkkaHttpVersion = "0.7.2"
 lazy val scalaLoggingVersion = "3.9.5"
@@ -11,6 +12,7 @@ lazy val logbackVersion = "1.2.11"
 lazy val nimbusJoseJWTVersion = "9.23"
 lazy val pureConfigVersion = "0.17.1"
 lazy val macwireVersion = "2.5.7"
+lazy val scalaTestVersion = "3.2.13"
 
 lazy val root =
   (project in file("."))
@@ -73,9 +75,13 @@ lazy val server = (project in file("todo-server"))
       "ch.qos.logback"              % "logback-classic" % logbackVersion,
       "com.nimbusds"                % "nimbus-jose-jwt" % nimbusJoseJWTVersion,
       "com.github.pureconfig"      %% "pureconfig"      % pureConfigVersion,
-      "com.softwaremill.macwire"   %% "macros"          % macwireVersion
+      "com.softwaremill.macwire"   %% "macros"          % macwireVersion,
+      "org.scalatest"     %% "scalatest"           % scalaTestVersion % Test,
+      "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion      % Test,
+      "com.typesafe.akka" %% "akka-http-testkit"   % akkaHttpVersion  % Test,
+      "de.heikoseeberger" %% "akka-http-play-json" % akkaHttpPlayJsonVersion % Test
     ),
-    Compile / run / mainClass := Some("com.gaston.todo.tapir.server.Server"),
+    Compile / run / mainClass := Some("com.gaston.todo.tapir.server.Main"),
     laikaSite / target := baseDirectory.value.getAbsoluteFile / "src" / "main" / "resources" / "html",
     laikaTheme := Helium.defaults.all
       .metadata(
