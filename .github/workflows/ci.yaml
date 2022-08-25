@@ -12,15 +12,10 @@ jobs:
         with:
           fetch-depth: 0
       - name: Cache SBT
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.ivy2/cache
-            ~/.sbt
-          key: ${{ runner.os }}-sbt-${{ hashFiles('**/build.sbt') }}
+        uses: coursier/cache-action@v6
       - name: Setup Scala
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Validate Scala Format
+      - name: Run Linters and Tests
         run: sbt clean compile scalafmtCheckAll scalafmtSbtCheck test

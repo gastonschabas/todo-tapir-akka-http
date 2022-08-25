@@ -86,10 +86,14 @@ class ToDosApi(
     }
 
   private val addToDoEndpoint =
-    secureEndpoint(Endpoints.addToDoEndpoint).serverLogic { token => toDo =>
-      toDosRepository
-        .addToDo(token.subject, ToDoVO(toDo.title, toDo.description))
-        .map(id => Right(CreateToDoResponse(id)))
+    secureEndpoint(Endpoints.addToDoEndpoint).serverLogic {
+      token => toDoRequest =>
+        toDosRepository
+          .addToDo(
+            token.subject,
+            ToDoVO(toDoRequest.title, toDoRequest.description, token.subject)
+          )
+          .map(toDoResponse => Right(CreateToDoResponse(toDoResponse.id)))
     }
 
   private val deleteToDoEndpoint =
