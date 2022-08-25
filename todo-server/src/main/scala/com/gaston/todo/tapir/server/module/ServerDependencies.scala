@@ -5,6 +5,7 @@ import com.gaston.todo.tapir.server.api.ToDosApi
 import com.gaston.todo.tapir.server.auth.{Authentication, AuthenticationImpl}
 import com.gaston.todo.tapir.server.config.{
   AppConfig,
+  DbConfig,
   DbProperties,
   ServerConfig
 }
@@ -16,12 +17,19 @@ import com.softwaremill.macwire._
 import com.typesafe.scalalogging.Logger
 import org.flywaydb.core.Flyway
 import pureconfig._
+import pureconfig.generic.ProductHint
 import pureconfig.generic.auto._
 import slick.jdbc.PostgresProfile.backend.Database
 
 import scala.concurrent.ExecutionContextExecutor
 
 trait ServerDependencies {
+
+  implicit def productHintDbConfig =
+    ProductHint[DbConfig](ConfigFieldMapping(CamelCase, CamelCase))
+
+  implicit def productHintDbProperties =
+    ProductHint[DbProperties](ConfigFieldMapping(CamelCase, CamelCase))
 
   val appConfig: AppConfig = ConfigSource.default.load[AppConfig] match {
     case Left(configError) =>
