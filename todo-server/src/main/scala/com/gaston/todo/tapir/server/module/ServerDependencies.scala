@@ -55,7 +55,7 @@ trait ServerDependencies {
 
   Flyway.configure
     .dataSource(
-      dbProperties.jdbcUrl,
+      s"postgres://${databaseProperties.host}:${databaseProperties.port}/${databaseProperties.dbName}",
       databaseProperties.user,
       databaseProperties.password
     )
