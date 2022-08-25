@@ -1,8 +1,5 @@
 package com.gaston.todo.tapir.server.config
 
-import pureconfig.generic.ProductHint
-import pureconfig.{CamelCase, ConfigFieldMapping}
-
 // auth config
 case class Jwks(url: String, connectTimeout: Int, readTimeout: Int)
 case class AuthConfig(issuer: String, audience: String, jwks: Jwks)
@@ -15,7 +12,8 @@ case class DbProperties(
   portNumber: String,
   databaseName: String,
   user: String,
-  password: String
+  password: String,
+  jdbcUrl: String
 )
 case class DbConfig(
   connectionPool: String,

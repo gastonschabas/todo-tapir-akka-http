@@ -20,8 +20,20 @@ class ToDosRepositoryInMemory(implicit ec: ExecutionContext)
       )
   }
 
-  def takeToDos(user: String, n: Int): Future[List[ToDoRow]] =
-    Future(toDosRepo.get(user).map(_.take(n).toList).getOrElse(List.empty))
+  def takeToDos(user: String, n: Int): Future[List[ToDoResponse]] =
+    Future(
+      toDosRepo
+        .get(user)
+        .map(toDoRows =>
+          toDoRows
+            .map(toDoRow =>
+              ToDoResponse(toDoRow.id, toDoRow.title, toDoRow.description)
+            )
+            .take(n)
+            .toList
+        )
+        .getOrElse(List.empty)
+    )
 
   def addToDo(user: String, toDo: ToDoVO): Future[ToDoResponse] = Future {
     val uuid = UUID.randomUUID()

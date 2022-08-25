@@ -13,8 +13,7 @@ import com.gaston.todo.tapir.server.auth.Authentication
 import com.gaston.todo.tapir.server.config.{AppConfig, DbConfig, DbProperties}
 import com.gaston.todo.tapir.server.repository.{
   ToDosRepository,
-  ToDosRepositoryInMemory,
-  ToDosRepositoryPostgreSql
+  ToDosRepositoryInMemory
 }
 import com.softwaremill.macwire.wire
 import de.heikoseeberger.akkahttpplayjson.PlayJsonSupport
@@ -23,7 +22,6 @@ import org.scalatest.matchers.should.Matchers
 import pureconfig._
 import pureconfig.generic.ProductHint
 import pureconfig.generic.auto._
-import slick.jdbc.PostgresProfile.backend.Database
 
 import scala.util.{Success, Try}
 
