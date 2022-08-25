@@ -22,5 +22,5 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Validate Scala Format
+      - name: Run Linters and Tests
         run: sbt clean compile scalafmtCheckAll scalafmtSbtCheck test
