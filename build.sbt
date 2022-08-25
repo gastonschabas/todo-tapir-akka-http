@@ -1,6 +1,6 @@
 import laika.helium.Helium
 
-lazy val tapirVersion = "1.0.3"
+lazy val tapirVersion = "1.0.5"
 lazy val openAPICirceYamlVersion = "0.2.1"
 lazy val akkaVersion = "2.6.19"
 lazy val akkaHttpVersion = "10.2.9"
@@ -9,7 +9,7 @@ lazy val pac4jVersion = "4.5.4"
 lazy val pac4jAkkaHttpVersion = "0.7.2"
 lazy val scalaLoggingVersion = "3.9.5"
 lazy val logbackVersion = "1.2.11"
-lazy val nimbusJoseJWTVersion = "9.23"
+lazy val nimbusJoseJWTVersion = "9.24.2"
 lazy val pureConfigVersion = "0.17.1"
 lazy val macwireVersion = "2.5.7"
 lazy val postgreSqlDriverVersion = "42.4.2"
