@@ -1,1 +1,1 @@
-web: ./todo-server/target/universal/stage/bin/server -Dserver-config.port=$PORT
+web: ./todo-server/target/universal/stage/bin/server -Dserver-config.port=$PORT -Ddb-config.properties.jdbcUrl=$DATABASE_URL -Ddb-config.properties.user=$JDBC_DATABASE_USERNAME -Ddb-config.properties.password=$JDBC_DATABASE_PASSWORD

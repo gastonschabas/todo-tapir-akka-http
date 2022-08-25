@@ -39,7 +39,7 @@ trait ServerDependencies {
   implicit val actorSystem: ActorSystem = ActorSystem()
   implicit val ec: ExecutionContextExecutor = actorSystem.dispatcher
 
-  val dbConfig: Database = Database.forConfig("db-config")
+  val dbConfig: Database = Database.forURL("db-config")
 
   val toDosRepository: ToDosRepository = wire[ToDosRepositoryPostgreSql]
   val authentication: Authentication = wire[AuthenticationImpl]
