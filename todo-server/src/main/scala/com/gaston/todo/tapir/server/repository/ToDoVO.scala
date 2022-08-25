@@ -1,3 +1,3 @@
 package com.gaston.todo.tapir.server.repository
 
-case class ToDoVO(title: String, description: String)
+case class ToDoVO(title: String, description: String, user: String)

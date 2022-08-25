@@ -6,12 +6,13 @@ import com.gaston.todo.tapir.server.auth.{Authentication, AuthenticationImpl}
 import com.gaston.todo.tapir.server.config.AppConfig
 import com.gaston.todo.tapir.server.repository.{
   ToDosRepository,
-  ToDosRepositoryInMemory
+  ToDosRepositoryPostgreSql
 }
 import com.softwaremill.macwire._
 import com.typesafe.scalalogging.Logger
 import pureconfig._
 import pureconfig.generic.auto._
+import slick.jdbc.PostgresProfile.backend.Database
 
 trait ServerDependencies {
 
@@ -24,7 +25,9 @@ trait ServerDependencies {
   implicit val actorSystem: ActorSystem = ActorSystem()
   implicit val ec = actorSystem.dispatcher
 
-  val toDosRepository: ToDosRepository = wire[ToDosRepositoryInMemory]
+  val dbConfig: Database = Database.forConfig("db-config")
+
+  val toDosRepository: ToDosRepository = wire[ToDosRepositoryPostgreSql]
   val authentication: Authentication = wire[AuthenticationImpl]
   val logger = Logger(this.getClass.getName)
   val serverConfig = appConfig.serverConfig

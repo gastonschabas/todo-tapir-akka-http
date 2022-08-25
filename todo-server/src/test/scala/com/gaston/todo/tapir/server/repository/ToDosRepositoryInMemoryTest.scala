@@ -1,6 +1,5 @@
 package com.gaston.todo.tapir.server.repository
 
-import com.gaston.todo.tapir.contract.response.ToDoResponse
 import org.scalatest.OptionValues
 import org.scalatest.funsuite.AsyncFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -28,24 +27,22 @@ class ToDosRepositoryInMemoryTest
   test("a toDo should be returned when it was saved") {
     val fixture = baseFixture
     val user = "user"
-    val toDoVO = ToDoVO("title", "description")
+    val toDoVO = ToDoVO("title", "description", "user")
     for {
-      id <- fixture.toDosRepositoryInMemory.addToDo(user, toDoVO)
-      toDo <- fixture.toDosRepositoryInMemory.getToDo(user, id)
-    } yield toDo should be(
-      Some(ToDoResponse(id, toDoVO.title, toDoVO.description))
-    )
+      toDoResponse <- fixture.toDosRepositoryInMemory.addToDo(user, toDoVO)
+      toDo <- fixture.toDosRepositoryInMemory.getToDo(user, toDoResponse.id)
+    } yield toDo should be(toDo)
   }
 
   test("a ToDo saved and then deleted should not be found") {
     val fixture = baseFixture
     val user = "user"
-    val toDoVO = ToDoVO("title", "description")
+    val toDoVO = ToDoVO("title", "description", user)
     for {
-      id <- fixture.toDosRepositoryInMemory.addToDo(user, toDoVO)
-      _ <- fixture.toDosRepositoryInMemory.getToDo(user, id)
-      _ <- fixture.toDosRepositoryInMemory.deleteToDo(user, id)
-      toDo <- fixture.toDosRepositoryInMemory.getToDo(user, id)
+      toDoResponse <- fixture.toDosRepositoryInMemory.addToDo(user, toDoVO)
+      _ <- fixture.toDosRepositoryInMemory.getToDo(user, toDoResponse.id)
+      _ <- fixture.toDosRepositoryInMemory.deleteToDo(user, toDoResponse.id)
+      toDo <- fixture.toDosRepositoryInMemory.getToDo(user, toDoResponse.id)
     } yield toDo should be(None)
   }
 
@@ -54,9 +51,9 @@ class ToDosRepositoryInMemoryTest
   ) {
     val fixture = baseFixture
     val user = "user"
-    val toDoVO = ToDoVO("title", "description")
-    val toDoVO2 = ToDoVO("title2", "description2")
-    val toDoVO3 = ToDoVO("title3", "description3")
+    val toDoVO = ToDoVO("title", "description", user)
+    val toDoVO2 = ToDoVO("title2", "description2", user)
+    val toDoVO3 = ToDoVO("title3", "description3", user)
     for {
       _ <- fixture.toDosRepositoryInMemory.addToDo(user, toDoVO)
       _ <- fixture.toDosRepositoryInMemory.addToDo(user, toDoVO2)
@@ -70,9 +67,9 @@ class ToDosRepositoryInMemoryTest
   ) {
     val fixture = baseFixture
     val user = "user"
-    val toDoVO = ToDoVO("title", "description")
-    val toDoVO2 = ToDoVO("title2", "description2")
-    val toDoVO3 = ToDoVO("title3", "description3")
+    val toDoVO = ToDoVO("title", "description", user)
+    val toDoVO2 = ToDoVO("title2", "description2", user)
+    val toDoVO3 = ToDoVO("title3", "description3", user)
     for {
       _ <- fixture.toDosRepositoryInMemory.addToDo(user, toDoVO)
       _ <- fixture.toDosRepositoryInMemory.addToDo(user, toDoVO2)

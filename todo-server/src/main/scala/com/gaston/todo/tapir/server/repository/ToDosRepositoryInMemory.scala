@@ -23,14 +23,14 @@ class ToDosRepositoryInMemory(implicit ec: ExecutionContext)
   def takeToDos(user: String, n: Int): Future[List[ToDoRow]] =
     Future(toDosRepo.get(user).map(_.take(n).toList).getOrElse(List.empty))
 
-  def addToDo(user: String, toDo: ToDoVO): Future[UUID] = Future {
+  def addToDo(user: String, toDo: ToDoVO): Future[ToDoResponse] = Future {
     val uuid = UUID.randomUUID()
-    val toDoRow = ToDoRow(uuid, toDo.title, toDo.description)
+    val toDoRow = ToDoRow(uuid, toDo.title, toDo.description, user)
     toDosRepo.get(user) match {
       case Some(value) => value += toDoRow
       case None => toDosRepo.put(user, ListBuffer(toDoRow))
     }
-    uuid
+    ToDoResponse(uuid, toDo.title, toDo.description)
   }
 
   def deleteToDo(user: String, uuid: UUID): Future[Boolean] = Future {
