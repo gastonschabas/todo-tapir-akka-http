@@ -39,8 +39,26 @@ trait ServerDependencies {
 
   lazy val dbProperties: DbProperties = appConfig.dbConfig.properties
 
+  case class DatabaseProperties(
+    user: String,
+    password: String,
+    host: String,
+    port: String,
+    dbName: String
+  )
+
+  val JdbcUrlRegex = "postgres://(\\w+):(\\w+)@([\\w\\-\\.]+):(\\d+)/(\\w+)".r
+  val databaseProperties = dbProperties.jdbcUrl match {
+    case JdbcUrlRegex(user, password, host, port, dbName) =>
+      DatabaseProperties(user, password, host, port, dbName)
+  }
+
   Flyway.configure
-    .dataSource(dbProperties.jdbcUrl, dbProperties.user, dbProperties.password)
+    .dataSource(
+      dbProperties.jdbcUrl,
+      databaseProperties.user,
+      databaseProperties.password
+    )
     .load()
     .migrate()
 
