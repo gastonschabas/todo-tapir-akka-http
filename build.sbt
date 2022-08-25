@@ -12,7 +12,11 @@ lazy val logbackVersion = "1.2.11"
 lazy val nimbusJoseJWTVersion = "9.23"
 lazy val pureConfigVersion = "0.17.1"
 lazy val macwireVersion = "2.5.7"
+lazy val postgreSqlDriverVersion = "42.4.2"
+lazy val slickVersion = "3.3.3"
+lazy val flywayVersion = "9.1.6"
 lazy val scalaTestVersion = "3.2.13"
+lazy val testcontainersScalaVersion = "0.40.10"
 
 lazy val root =
   (project in file("."))
@@ -76,10 +80,16 @@ lazy val server = (project in file("todo-server"))
       "com.nimbusds"                % "nimbus-jose-jwt" % nimbusJoseJWTVersion,
       "com.github.pureconfig"      %% "pureconfig"      % pureConfigVersion,
       "com.softwaremill.macwire"   %% "macros"          % macwireVersion,
+      "com.typesafe.slick"         %% "slick"           % slickVersion,
+      "com.typesafe.slick"         %% "slick-hikaricp"  % slickVersion,
+      "org.flywaydb"                % "flyway-core"     % flywayVersion,
+      "org.postgresql"     % "postgresql"          % postgreSqlDriverVersion,
       "org.scalatest"     %% "scalatest"           % scalaTestVersion % Test,
       "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion      % Test,
       "com.typesafe.akka" %% "akka-http-testkit"   % akkaHttpVersion  % Test,
-      "de.heikoseeberger" %% "akka-http-play-json" % akkaHttpPlayJsonVersion % Test
+      "de.heikoseeberger" %% "akka-http-play-json" % akkaHttpPlayJsonVersion % Test,
+      "com.dimafeng" %% "testcontainers-scala-scalatest" % testcontainersScalaVersion % Test,
+      "com.dimafeng" %% "testcontainers-scala-postgresql" % testcontainersScalaVersion % Test
     ),
     Compile / run / mainClass := Some("com.gaston.todo.tapir.server.Main"),
     laikaSite / target := baseDirectory.value.getAbsoluteFile / "src" / "main" / "resources" / "html",
