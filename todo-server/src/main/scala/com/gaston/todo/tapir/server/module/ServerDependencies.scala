@@ -52,20 +52,23 @@ trait ServerDependencies {
     case JdbcUrlRegex(user, password, host, port, dbName) =>
       DatabaseProperties(user, password, host, port, dbName)
   }
+  val jdbcUrl =
+    s"jdbc:postgresql://${databaseProperties.host}:${databaseProperties.port}/${databaseProperties.dbName}"
 
   Flyway.configure
-    .dataSource(
-      s"jdbc:postgresql://${databaseProperties.host}:${databaseProperties.port}/${databaseProperties.dbName}",
-      databaseProperties.user,
-      databaseProperties.password
-    )
+    .dataSource(jdbcUrl, databaseProperties.user, databaseProperties.password)
     .load()
     .migrate()
 
   implicit val actorSystem: ActorSystem = ActorSystem()
   implicit val ec: ExecutionContextExecutor = actorSystem.dispatcher
 
-  val dbConfig: Database = Database.forURL("db-config")
+  val dbConfig: Database = Database.forURL(
+    url = jdbcUrl,
+    user = databaseProperties.user,
+    password = databaseProperties.password,
+    driver = "org.postgresql.Driver"
+  )
 
   val toDosRepository: ToDosRepository = wire[ToDosRepositoryPostgreSql]
   val authentication: Authentication = wire[AuthenticationImpl]
