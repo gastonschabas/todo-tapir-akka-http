@@ -18,6 +18,11 @@ REST API that will let you add and remove ToDo tasks
 
 This demo is deployed in [heroku](https://www.heroku.com/) platform.
 
+# Monitoring
+
+- [Kamon telemetry](https://kamon.io/telemetry/) is the tool selected to generate metrics 
+- [Kamon APM](https://kamon.io/apm/) is used as the observability tool of this project
+
 # Authentication
 
 To hit the endpoints of the API a bearer token must be provided in the `Authorization` header of the http request. In 
