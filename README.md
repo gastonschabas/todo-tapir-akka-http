@@ -66,6 +66,11 @@ regular bash script.
 - The Rest API is deployed in [heroku](https://www.heroku.com/) platform.
 - The demo con be found in [ToDo Tapir Akka Http](https://todo-tapir-akka-http.herokuapp.com/)
 
+# Monitoring
+
+- [Kamon telemetry](https://kamon.io/telemetry/) is the tool selected to generate metrics
+- [Kamon APM](https://kamon.io/apm/) is used as the observability tool of this project
+
 # API Spec
 
 - [Open API Spec](https://todo-tapir-akka-http.herokuapp.com/api/v0.0/spec)
