@@ -1,6 +1,6 @@
 import laika.helium.Helium
 
-lazy val tapirVersion = "1.0.5"
+lazy val tapirVersion = "1.0.6"
 lazy val openAPICirceYamlVersion = "0.2.1"
 lazy val akkaVersion = "2.6.19"
 lazy val akkaHttpVersion = "10.2.9"
@@ -9,14 +9,15 @@ lazy val pac4jVersion = "4.5.4"
 lazy val pac4jAkkaHttpVersion = "0.7.2"
 lazy val scalaLoggingVersion = "3.9.5"
 lazy val logbackVersion = "1.2.11"
-lazy val nimbusJoseJWTVersion = "9.24.2"
+lazy val nimbusJoseJWTVersion = "9.24.3"
 lazy val pureConfigVersion = "0.17.1"
-lazy val macwireVersion = "2.5.7"
-lazy val postgreSqlDriverVersion = "42.4.2"
+lazy val macwireVersion = "2.5.8"
+lazy val postgreSqlDriverVersion = "42.5.0"
 lazy val slickVersion = "3.3.3"
-lazy val flywayVersion = "9.1.6"
+lazy val flywayVersion = "9.2.0"
 lazy val scalaTestVersion = "3.2.13"
 lazy val testcontainersScalaVersion = "0.40.10"
+lazy val kamonVersion = "2.5.8"
 
 lazy val root =
   (project in file("."))
@@ -84,6 +85,8 @@ lazy val server = (project in file("todo-server"))
       "com.typesafe.slick"         %% "slick-hikaricp"  % slickVersion,
       "org.flywaydb"                % "flyway-core"     % flywayVersion,
       "org.postgresql"     % "postgresql"          % postgreSqlDriverVersion,
+      "io.kamon"          %% "kamon-bundle"        % kamonVersion,
+      "io.kamon"          %% "kamon-apm-reporter"  % kamonVersion,
       "org.scalatest"     %% "scalatest"           % scalaTestVersion % Test,
       "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion      % Test,
       "com.typesafe.akka" %% "akka-http-testkit"   % akkaHttpVersion  % Test,
