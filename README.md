@@ -10,6 +10,7 @@ Small project to see how [tapir](https://tapir.softwaremill.com/en/latest/) can 
   * [Prod Mode](#prod-mode)
 * [Libraries](#libraries)
 * [Demo](#demo)
+* [Monitoring](#monitoring)
 * [API Spec](#api-spec)
 
 # Requirements
