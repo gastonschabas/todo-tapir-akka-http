@@ -7,6 +7,7 @@ import org.scalatest.funsuite.AsyncFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.testcontainers.utility.DockerImageName
 import slick.jdbc.PostgresProfile.backend.Database
+import slick.util.AsyncExecutor
 
 import java.util.UUID
 
@@ -30,11 +31,7 @@ class ToDosRepositoryPostgreSqlTest
 
   test("querying an empty table should not found a ToDo") {
     withContainers { containers =>
-      val db = Database.forURL(
-        containers.jdbcUrl,
-        containers.username,
-        containers.password
-      )
+      val db: Database = createDbConnection(containers)
       val repo = new ToDosRepositoryPostgreSql(db)
       repo.getToDo("user", UUID.randomUUID()).map(x => x should be(empty))
     }
@@ -42,11 +39,7 @@ class ToDosRepositoryPostgreSqlTest
 
   test("after a Todo was inserted it must be found") {
     withContainers { containers =>
-      val db = Database.forURL(
-        containers.jdbcUrl,
-        containers.username,
-        containers.password
-      )
+      val db: Database = createDbConnection(containers)
       val repo = new ToDosRepositoryPostgreSql(db)
       val user = "user"
       for {
@@ -54,5 +47,14 @@ class ToDosRepositoryPostgreSqlTest
         toDoFound <- repo.getToDo(user, toDoResponse.id)
       } yield toDoFound should not be empty
     }
+  }
+
+  private def createDbConnection(containers: PostgreSQLContainer): Database = {
+    Database.forURL(
+      url = containers.jdbcUrl,
+      user = containers.username,
+      password = containers.password,
+      executor = AsyncExecutor.default("AsyncExecutor.test", 20)
+    )
   }
 }
