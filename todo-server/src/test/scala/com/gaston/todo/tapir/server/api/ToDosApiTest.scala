@@ -10,7 +10,7 @@ import com.gaston.todo.tapir.contract.response.{
   ToDoResponse
 }
 import com.gaston.todo.tapir.server.auth.Authentication
-import com.gaston.todo.tapir.server.config.{AppConfig, DbConfig, DbProperties}
+import com.gaston.todo.tapir.server.config.AppConfig
 import com.gaston.todo.tapir.server.repository.{
   ToDosRepository,
   ToDosRepositoryInMemory
@@ -20,7 +20,6 @@ import de.heikoseeberger.akkahttpplayjson.PlayJsonSupport
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import pureconfig._
-import pureconfig.generic.ProductHint
 import pureconfig.generic.auto._
 
 import scala.util.{Success, Try}
@@ -32,11 +31,6 @@ class ToDosApiTest
     with PlayJsonSupport {
 
   class BaseFixture {
-    implicit def productHintDbConfig =
-      ProductHint[DbConfig](ConfigFieldMapping(CamelCase, CamelCase))
-    implicit def productHintDbProperties =
-      ProductHint[DbProperties](ConfigFieldMapping(CamelCase, CamelCase))
-
     val appConfig = ConfigSource.default.load[AppConfig] match {
       case Left(configError) =>
         throw new RuntimeException(configError.prettyPrint(2))

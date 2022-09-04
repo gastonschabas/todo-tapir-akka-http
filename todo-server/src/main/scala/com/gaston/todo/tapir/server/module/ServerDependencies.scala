@@ -3,12 +3,7 @@ package com.gaston.todo.tapir.server.module
 import akka.actor.ActorSystem
 import com.gaston.todo.tapir.server.api.ToDosApi
 import com.gaston.todo.tapir.server.auth.{Authentication, AuthenticationImpl}
-import com.gaston.todo.tapir.server.config.{
-  AppConfig,
-  DbConfig,
-  DbProperties,
-  ServerConfig
-}
+import com.gaston.todo.tapir.server.config.{AppConfig, ServerConfig}
 import com.gaston.todo.tapir.server.repository.{
   ToDosRepository,
   ToDosRepositoryPostgreSql
@@ -17,19 +12,14 @@ import com.softwaremill.macwire._
 import com.typesafe.scalalogging.Logger
 import org.flywaydb.core.Flyway
 import pureconfig._
-import pureconfig.generic.ProductHint
 import pureconfig.generic.auto._
+import slick.jdbc.DatabaseUrlDataSource
 import slick.jdbc.PostgresProfile.backend.Database
+import slick.util.AsyncExecutor
 
 import scala.concurrent.ExecutionContextExecutor
 
 trait ServerDependencies {
-
-  implicit def productHintDbConfig =
-    ProductHint[DbConfig](ConfigFieldMapping(CamelCase, CamelCase))
-
-  implicit def productHintDbProperties =
-    ProductHint[DbProperties](ConfigFieldMapping(CamelCase, CamelCase))
 
   val appConfig: AppConfig = ConfigSource.default.load[AppConfig] match {
     case Left(configError) =>
@@ -37,37 +27,20 @@ trait ServerDependencies {
     case Right(config) => config
   }
 
-  lazy val dbProperties: DbProperties = appConfig.dbConfig.properties
-
-  case class DatabaseProperties(
-    user: String,
-    password: String,
-    host: String,
-    port: String,
-    dbName: String
-  )
-
-  val JdbcUrlRegex = "postgres://(\\w+):(\\w+)@([\\w\\-\\.]+):(\\d+)/(\\w+)".r
-  val databaseProperties = dbProperties.jdbcUrl match {
-    case JdbcUrlRegex(user, password, host, port, dbName) =>
-      DatabaseProperties(user, password, host, port, dbName)
-  }
-  val jdbcUrl =
-    s"jdbc:postgresql://${databaseProperties.host}:${databaseProperties.port}/${databaseProperties.dbName}"
+  lazy val dataSource = new DatabaseUrlDataSource
 
   Flyway.configure
-    .dataSource(jdbcUrl, databaseProperties.user, databaseProperties.password)
+    .dataSource(dataSource)
     .load()
     .migrate()
 
   implicit val actorSystem: ActorSystem = ActorSystem()
   implicit val ec: ExecutionContextExecutor = actorSystem.dispatcher
 
-  val dbConfig: Database = Database.forURL(
-    url = jdbcUrl,
-    user = databaseProperties.user,
-    password = databaseProperties.password,
-    driver = "org.postgresql.Driver"
+  val dbConfig: Database = Database.forDataSource(
+    dataSource,
+    Some(10),
+    AsyncExecutor.default("AsyncExecutor.todo", 20)
   )
 
   val toDosRepository: ToDosRepository = wire[ToDosRepositoryPostgreSql]
