@@ -4,6 +4,10 @@
 .gradle
 .idea
 .bsp
+.bloop
+.metals
+.vscode
+metals.sbt
 .sbt_completion_cache
 
 target/
