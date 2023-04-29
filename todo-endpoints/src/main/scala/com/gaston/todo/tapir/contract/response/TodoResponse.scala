@@ -1,6 +1,7 @@
 package com.gaston.todo.tapir.contract.response
 
-import play.api.libs.json.Json
+import com.github.plokhotnyuk.jsoniter_scala.core.JsonValueCodec
+import com.github.plokhotnyuk.jsoniter_scala.macros.JsonCodecMaker
 
 import java.util.UUID
 
@@ -19,5 +20,9 @@ object ToDoResponse {
   )
   val exampleList = List(example1, example2)
 
-  implicit val format = Json.format[ToDoResponse]
+  implicit val codec: JsonValueCodec[ToDoResponse] =
+    JsonCodecMaker.make[ToDoResponse]
+
+  implicit val listCodec: JsonValueCodec[List[ToDoResponse]] =
+    JsonCodecMaker.make[List[ToDoResponse]]
 }
