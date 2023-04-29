@@ -10,7 +10,8 @@ import com.gaston.todo.tapir.contract.response.{
 import sttp.model.StatusCode
 import sttp.tapir._
 import sttp.tapir.generic.auto._
-import sttp.tapir.json.play.jsonBody
+//import sttp.tapir.json.play.jsonBody
+import sttp.tapir.json.jsoniter.jsonBody
 
 import java.util.UUID
 

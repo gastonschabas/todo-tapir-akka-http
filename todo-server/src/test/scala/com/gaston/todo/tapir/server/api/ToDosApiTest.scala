@@ -16,7 +16,7 @@ import com.gaston.todo.tapir.server.repository.{
   ToDosRepositoryInMemory
 }
 import com.softwaremill.macwire.wire
-import de.heikoseeberger.akkahttpplayjson.PlayJsonSupport
+import de.heikoseeberger.akkahttpjsoniterscala.JsoniterScalaSupport
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import pureconfig._
@@ -28,7 +28,7 @@ class ToDosApiTest
     extends AnyFunSuite
     with Matchers
     with ScalatestRouteTest
-    with PlayJsonSupport {
+    with JsoniterScalaSupport {
 
   class BaseFixture {
     val appConfig = ConfigSource.default.load[AppConfig] match {
