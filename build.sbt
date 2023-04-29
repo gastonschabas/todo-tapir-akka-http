@@ -4,7 +4,7 @@ lazy val tapirVersion = "1.0.6"
 lazy val openAPICirceYamlVersion = "0.2.1"
 lazy val akkaVersion = "2.6.19"
 lazy val akkaHttpVersion = "10.2.9"
-lazy val akkaHttpPlayJsonVersion = "1.39.2"
+lazy val akkaHttpJsonVersion = "1.39.2"
 lazy val pac4jVersion = "4.5.4"
 lazy val pac4jAkkaHttpVersion = "0.7.2"
 lazy val scalaLoggingVersion = "3.9.5"
@@ -54,8 +54,10 @@ lazy val root =
 lazy val endpoints = (project in file("todo-endpoints")).settings(
   name := "todo-endpoints",
   libraryDependencies := Seq(
-    "com.softwaremill.sttp.tapir" %% "tapir-core"      % tapirVersion,
-    "com.softwaremill.sttp.tapir" %% "tapir-json-play" % tapirVersion
+    "com.softwaremill.sttp.tapir" %% "tapir-core"           % tapirVersion,
+    "com.softwaremill.sttp.tapir" %% "tapir-jsoniter-scala" % tapirVersion,
+    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % "2.23.0",
+    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.23.0"
   )
 )
 
@@ -90,7 +92,7 @@ lazy val server = (project in file("todo-server"))
       "org.scalatest"     %% "scalatest"           % scalaTestVersion % Test,
       "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion      % Test,
       "com.typesafe.akka" %% "akka-http-testkit"   % akkaHttpVersion  % Test,
-      "de.heikoseeberger" %% "akka-http-play-json" % akkaHttpPlayJsonVersion % Test,
+      "de.heikoseeberger" %% "akka-http-jsoniter-scala" % akkaHttpJsonVersion % Test,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % testcontainersScalaVersion % Test,
       "com.dimafeng" %% "testcontainers-scala-postgresql" % testcontainersScalaVersion % Test
     ),

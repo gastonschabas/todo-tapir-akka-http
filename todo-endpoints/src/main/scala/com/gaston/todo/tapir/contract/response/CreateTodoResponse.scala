@@ -1,6 +1,7 @@
 package com.gaston.todo.tapir.contract.response
 
-import play.api.libs.json.Json
+import com.github.plokhotnyuk.jsoniter_scala.core.JsonValueCodec
+import com.github.plokhotnyuk.jsoniter_scala.macros.JsonCodecMaker
 
 import java.util.UUID
 
@@ -11,5 +12,6 @@ object CreateToDoResponse {
     UUID.fromString("65c6bb19-b576-4019-b569-388ac3f92ce2")
   )
 
-  implicit val format = Json.format[CreateToDoResponse]
+  implicit val codec: JsonValueCodec[CreateToDoResponse] =
+    JsonCodecMaker.make[CreateToDoResponse]
 }
