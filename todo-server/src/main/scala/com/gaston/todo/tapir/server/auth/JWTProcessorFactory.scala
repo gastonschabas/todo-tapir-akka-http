@@ -1,7 +1,7 @@
 package com.gaston.todo.tapir.server.auth
 
 import com.gaston.todo.tapir.server.config.AuthConfig
-import com.nimbusds.jose.jwk.source.RemoteJWKSet
+import com.nimbusds.jose.jwk.source.{JWKSource, JWKSourceBuilder}
 import com.nimbusds.jose.proc.{
   DefaultJOSEObjectTypeVerifier,
   JWSVerificationKeySelector,
@@ -32,14 +32,16 @@ object JWTProcessorFactory {
     // OAuth 2.0 server's JWK set, published at a well-known URL. The RemoteJWKSet
     // object caches the retrieved keys to speed up subsequent look-ups and can
     // also handle key-rollover
-    val keySource: RemoteJWKSet[SecurityContext] =
-      new RemoteJWKSet[SecurityContext](
-        new URL(authConfig.jwks.url),
-        new DefaultResourceRetriever(
-          authConfig.jwks.connectTimeout,
-          authConfig.jwks.readTimeout
+    val keySource: JWKSource[SecurityContext] =
+      JWKSourceBuilder
+        .create(
+          new URL(authConfig.jwks.url),
+          new DefaultResourceRetriever(
+            authConfig.jwks.connectTimeout,
+            authConfig.jwks.readTimeout
+          )
         )
-      )
+        .build()
 
     // The expected JWS algorithm of the access tokens (agreed out-of-band)
     val expectedJWSAlg: JWSAlgorithm = JWSAlgorithm.RS256
