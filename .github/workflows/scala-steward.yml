@@ -1,0 +1,29 @@
+name: Scala Steward
+on:
+  schedule:
+    - cron: '0 9 * * 6'
+  workflow_dispatch:
+jobs:
+  scala-steward:
+    runs-on: ubuntu-latest
+    name: Launch Scala Steward
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v2
+        with:
+          git_user_signingkey: true
+        env:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Launch Scala Steward
+        uses: scala-steward-org/scala-steward-action@v2
+        with:
+          github-token: ${{ secrets.SCALA_STEWARD_TOKEN }}
+          signing-key: ${{ secrets.GPG_SIGNING_KEY_ID }}
+          author-email: gastonschabas@gmail.com
+          author-name: Gastón Schabas
+          sign-commits: true
