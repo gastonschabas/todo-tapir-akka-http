@@ -1,0 +1,16 @@
+pull_request_rules:
+  - name: Automatic assign and label scala-steward's PRs
+    conditions:
+      - base=main
+      - head~=^update/
+    actions:
+      label:
+        add: [dependency-update]
+  - name: Automatic merge scala-steward's PRs
+    conditions:
+      - check-success=build
+      - base=main
+      - head~=^update/
+    actions:
+      merge:
+        method: squash
