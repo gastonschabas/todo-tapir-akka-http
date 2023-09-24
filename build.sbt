@@ -25,7 +25,7 @@ lazy val root =
     .settings(
       name                     := "todo-tapir-akka-http",
       version                  := "0.1",
-      ThisBuild / scalaVersion := "2.13.10",
+      ThisBuild / scalaVersion := "2.13.12",
       ThisBuild / scalacOptions := Seq(
         "-encoding",
         "utf8",
