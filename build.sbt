@@ -1,7 +1,7 @@
 import laika.helium.Helium
 
-lazy val tapirVersion = "1.7.6"
-lazy val openAPICirceYamlVersion = "0.6.3"
+lazy val tapirVersion = "1.8.1"
+lazy val openAPICirceYamlVersion = "0.7.1"
 lazy val akkaVersion = "2.6.20"
 lazy val akkaHttpVersion = "10.2.9"
 lazy val akkaHttpJsonVersion = "1.39.2"
