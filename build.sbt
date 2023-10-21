@@ -16,7 +16,7 @@ lazy val postgreSqlDriverVersion = "42.6.0"
 lazy val flywayVersion = "9.22.3"
 lazy val scalaTestVersion = "3.2.17"
 lazy val slickVersion = "3.4.1"
-lazy val kamonVersion = "2.6.4"
+lazy val kamonVersion = "2.6.5"
 lazy val testcontainersScalaVersion = "0.41.0"
 
 lazy val root =
