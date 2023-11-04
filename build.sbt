@@ -13,7 +13,7 @@ lazy val macwireVersion = "2.5.9"
 lazy val logbackVersion = "1.4.11"
 lazy val pureConfigVersion = "0.17.4"
 lazy val postgreSqlDriverVersion = "42.6.0"
-lazy val flywayVersion = "9.22.3"
+lazy val flywayVersion = "10.0.0"
 lazy val scalaTestVersion = "3.2.17"
 lazy val slickVersion = "3.4.1"
 lazy val kamonVersion = "2.6.5"
@@ -86,12 +86,13 @@ lazy val server = (project in file("todo-server"))
       "com.typesafe.slick"         %% "slick"           % slickVersion,
       "com.typesafe.slick"         %% "slick-hikaricp"  % slickVersion,
       "org.flywaydb"                % "flyway-core"     % flywayVersion,
-      "org.postgresql"     % "postgresql"          % postgreSqlDriverVersion,
-      "io.kamon"          %% "kamon-bundle"        % kamonVersion,
-      "io.kamon"          %% "kamon-apm-reporter"  % kamonVersion,
-      "org.scalatest"     %% "scalatest"           % scalaTestVersion % Test,
-      "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion      % Test,
-      "com.typesafe.akka" %% "akka-http-testkit"   % akkaHttpVersion  % Test,
+      "org.flywaydb"   % "flyway-database-postgresql" % flywayVersion,
+      "org.postgresql" % "postgresql"                 % postgreSqlDriverVersion,
+      "io.kamon"      %% "kamon-bundle"               % kamonVersion,
+      "io.kamon"      %% "kamon-apm-reporter"         % kamonVersion,
+      "org.scalatest" %% "scalatest"                  % scalaTestVersion % Test,
+      "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion     % Test,
+      "com.typesafe.akka" %% "akka-http-testkit"   % akkaHttpVersion % Test,
       "de.heikoseeberger" %% "akka-http-jsoniter-scala" % akkaHttpJsonVersion % Test,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % testcontainersScalaVersion % Test,
       "com.dimafeng" %% "testcontainers-scala-postgresql" % testcontainersScalaVersion % Test
