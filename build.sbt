@@ -17,7 +17,7 @@ lazy val flywayVersion = "10.14.0"
 lazy val scalaTestVersion = "3.2.18"
 lazy val slickVersion = "3.5.1"
 lazy val kamonVersion = "2.7.3"
-lazy val testcontainersScalaVersion = "0.41.3"
+lazy val testcontainersScalaVersion = "0.41.4"
 
 lazy val root =
   (project in file("."))
