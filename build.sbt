@@ -1,22 +1,22 @@
 import laika.helium.Helium
 
-lazy val tapirVersion = "1.10.13"
-lazy val openAPICirceYamlVersion = "0.10.0"
+lazy val tapirVersion = "1.10.15"
+lazy val openAPICirceYamlVersion = "0.11.3"
 lazy val akkaVersion = "2.6.20"
 lazy val akkaHttpVersion = "10.2.9"
 lazy val akkaHttpJsonVersion = "1.39.2"
 lazy val pac4jVersion = "4.5.4"
 lazy val pac4jAkkaHttpVersion = "0.7.2"
 lazy val scalaLoggingVersion = "3.9.5"
-lazy val nimbusJoseJWTVersion = "9.41.1"
+lazy val nimbusJoseJWTVersion = "9.41.2"
 lazy val macwireVersion = "2.6.2"
 lazy val logbackVersion = "1.5.8"
 lazy val pureConfigVersion = "0.17.7"
-lazy val postgreSqlDriverVersion = "42.7.3"
-lazy val flywayVersion = "10.17.3"
+lazy val postgreSqlDriverVersion = "42.7.4"
+lazy val flywayVersion = "10.19.0"
 lazy val scalaTestVersion = "3.2.19"
-lazy val slickVersion = "3.5.1"
-lazy val kamonVersion = "2.7.3"
+lazy val slickVersion = "3.5.2"
+lazy val kamonVersion = "2.7.4"
 lazy val testcontainersScalaVersion = "0.41.4"
 
 lazy val root =
@@ -25,7 +25,7 @@ lazy val root =
     .settings(
       name                     := "todo-tapir-akka-http",
       version                  := "0.1",
-      ThisBuild / scalaVersion := "2.13.14",
+      ThisBuild / scalaVersion := "2.13.15",
       ThisBuild / scalacOptions := Seq(
         "-encoding",
         "utf8",
@@ -56,8 +56,8 @@ lazy val endpoints = (project in file("todo-endpoints")).settings(
   libraryDependencies := Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-core"           % tapirVersion,
     "com.softwaremill.sttp.tapir" %% "tapir-jsoniter-scala" % tapirVersion,
-    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % "2.30.9",
-    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.30.9"
+    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % "2.30.14",
+    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.30.14"
   )
 )
 
