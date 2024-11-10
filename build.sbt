@@ -1,6 +1,6 @@
 import laika.helium.Helium
 
-lazy val tapirVersion = "1.11.7"
+lazy val tapirVersion = "1.11.8"
 lazy val openAPICirceYamlVersion = "0.11.3"
 lazy val akkaVersion = "2.6.20"
 lazy val akkaHttpVersion = "10.2.9"
@@ -8,12 +8,12 @@ lazy val akkaHttpJsonVersion = "1.39.2"
 lazy val pac4jVersion = "4.5.4"
 lazy val pac4jAkkaHttpVersion = "0.7.2"
 lazy val scalaLoggingVersion = "3.9.5"
-lazy val nimbusJoseJWTVersion = "9.45"
+lazy val nimbusJoseJWTVersion = "9.46"
 lazy val macwireVersion = "2.6.4"
 lazy val logbackVersion = "1.5.12"
 lazy val pureConfigVersion = "0.17.7"
 lazy val postgreSqlDriverVersion = "42.7.4"
-lazy val flywayVersion = "10.20.1"
+lazy val flywayVersion = "10.21.0"
 lazy val scalaTestVersion = "3.2.19"
 lazy val slickVersion = "3.5.2"
 lazy val kamonVersion = "2.7.5"
@@ -56,8 +56,8 @@ lazy val endpoints = (project in file("todo-endpoints")).settings(
   libraryDependencies := Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-core"           % tapirVersion,
     "com.softwaremill.sttp.tapir" %% "tapir-jsoniter-scala" % tapirVersion,
-    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % "2.30.15",
-    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.30.15"
+    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % "2.31.2",
+    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.31.2"
   )
 )
 
