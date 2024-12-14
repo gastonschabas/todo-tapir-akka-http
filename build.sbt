@@ -56,8 +56,8 @@ lazy val endpoints = (project in file("todo-endpoints")).settings(
   libraryDependencies := Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-core"           % tapirVersion,
     "com.softwaremill.sttp.tapir" %% "tapir-jsoniter-scala" % tapirVersion,
-    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % "2.31.3",
-    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.31.3"
+    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % "2.32.0",
+    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.32.0"
   )
 )
 
