@@ -16,7 +16,7 @@ jobs:
       - name: Setup Scala
         uses: actions/setup-java@v4.6.0
         with:
-          distribution: 'corretto'
+          distribution: 'temurin'
           java-version: 17
       - name: Run Linters and Tests
         run: sbt clean compile scalafmtCheckAll scalafmtSbtCheck test
