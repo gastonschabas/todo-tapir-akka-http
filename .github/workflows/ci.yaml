@@ -16,7 +16,7 @@ jobs:
       - name: Setup Scala
         uses: actions/setup-java@v4
         with:
-          distribution: 'correto'
+          distribution: 'corretto'
           java-version: 17
       - uses: sbt/setup-sbt@v1
       - name: Run Linters and Tests
