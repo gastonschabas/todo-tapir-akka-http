@@ -8,15 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Cache SBT
         uses: coursier/cache-action@v6
       - name: Setup Scala
-        uses: actions/setup-java@v4.6.0
+        uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: 'correto'
           java-version: 17
+      - uses: sbt/setup-sbt@v1
       - name: Run Linters and Tests
         run: sbt clean compile scalafmtCheckAll scalafmtSbtCheck test
