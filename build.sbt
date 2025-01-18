@@ -13,7 +13,7 @@ lazy val macwireVersion = "2.6.4"
 lazy val logbackVersion = "1.5.16"
 lazy val pureConfigVersion = "0.17.8"
 lazy val postgreSqlDriverVersion = "42.7.5"
-lazy val flywayVersion = "11.1.1"
+lazy val flywayVersion = "11.2.0"
 lazy val scalaTestVersion = "3.2.19"
 lazy val slickVersion = "3.5.2"
 lazy val kamonVersion = "2.7.5"
@@ -25,7 +25,7 @@ lazy val root =
     .settings(
       name                     := "todo-tapir-akka-http",
       version                  := "0.1",
-      ThisBuild / scalaVersion := "2.13.15",
+      ThisBuild / scalaVersion := "2.13.16",
       ThisBuild / scalacOptions := Seq(
         "-encoding",
         "utf8",
