@@ -1,6 +1,6 @@
 import laika.helium.Helium
 
-lazy val tapirVersion = "1.11.25"
+lazy val tapirVersion = "1.11.30"
 lazy val openAPICirceYamlVersion = "0.11.9"
 lazy val akkaVersion = "2.6.20"
 lazy val akkaHttpVersion = "10.2.9"
@@ -13,9 +13,9 @@ lazy val macwireVersion = "2.6.6"
 lazy val logbackVersion = "1.5.18"
 lazy val pureConfigVersion = "0.17.9"
 lazy val postgreSqlDriverVersion = "42.7.5"
-lazy val flywayVersion = "11.8.1"
+lazy val flywayVersion = "11.8.2"
 lazy val scalaTestVersion = "3.2.19"
-lazy val slickVersion = "3.6.0"
+lazy val slickVersion = "3.6.1"
 lazy val kamonVersion = "2.7.7"
 lazy val testcontainersScalaVersion = "0.43.0"
 
@@ -56,8 +56,8 @@ lazy val endpoints = (project in file("todo-endpoints")).settings(
   libraryDependencies := Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-core"           % tapirVersion,
     "com.softwaremill.sttp.tapir" %% "tapir-jsoniter-scala" % tapirVersion,
-    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % "2.35.3",
-    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.35.3"
+    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % "2.36.2",
+    "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.36.2"
   )
 )
 
