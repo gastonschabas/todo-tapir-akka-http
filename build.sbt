@@ -23,9 +23,9 @@ lazy val root =
   (project in file("."))
     .aggregate(`endpoints`, apiSpec, `server`)
     .settings(
-      name                     := "todo-tapir-akka-http",
-      version                  := "0.1",
-      ThisBuild / scalaVersion := "2.13.17",
+      name                      := "todo-tapir-akka-http",
+      version                   := "0.1",
+      ThisBuild / scalaVersion  := "2.13.17",
       ThisBuild / scalacOptions := Seq(
         "-encoding",
         "utf8",
@@ -52,7 +52,7 @@ lazy val root =
     )
 
 lazy val endpoints = (project in file("todo-endpoints")).settings(
-  name := "todo-endpoints",
+  name                := "todo-endpoints",
   libraryDependencies := Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-core"           % tapirVersion,
     "com.softwaremill.sttp.tapir" %% "tapir-jsoniter-scala" % tapirVersion,
@@ -63,7 +63,7 @@ lazy val endpoints = (project in file("todo-endpoints")).settings(
 
 lazy val apiSpec = (project in file("todo-api-spec"))
   .settings(
-    name := "todo-api-spec",
+    name                := "todo-api-spec",
     libraryDependencies := Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-openapi-docs" % tapirVersion,
       "com.softwaremill.sttp.apispec" %% "openapi-circe-yaml" % openAPICirceYamlVersion
