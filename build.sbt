@@ -1,6 +1,6 @@
 import laika.helium.Helium
 
-lazy val tapirVersion = "1.12.3"
+lazy val tapirVersion = "1.12.5"
 lazy val openAPICirceYamlVersion = "0.11.10"
 lazy val akkaVersion = "2.6.20"
 lazy val akkaHttpVersion = "10.2.9"
@@ -25,7 +25,7 @@ lazy val root =
     .settings(
       name                      := "todo-tapir-akka-http",
       version                   := "0.1",
-      ThisBuild / scalaVersion  := "2.13.17",
+      ThisBuild / scalaVersion  := "2.13.18",
       ThisBuild / scalacOptions := Seq(
         "-encoding",
         "utf8",
